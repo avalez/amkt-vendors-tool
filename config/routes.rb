@@ -10,8 +10,8 @@ AmktClient::Application.routes.draw do
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
+  # maps HTTP verbs to controller actions automatically:
+  resources :licenses
 
   # Sample resource route with options:
   #   resources :products do
@@ -46,10 +46,10 @@ AmktClient::Application.routes.draw do
   #     resources :products
   #   end
 
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
-
+  # TODO delete public/index.html.
+  # map '/' to be a redirect
+  root :to => redirect('/licenses')
+  
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.

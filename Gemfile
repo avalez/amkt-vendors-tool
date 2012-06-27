@@ -31,3 +31,6 @@ group :test do
   # Pretty printed test output
   gem 'turn', :require => false
 end
+
+# To use debugger
+gem 'haml'
