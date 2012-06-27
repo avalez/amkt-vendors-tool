@@ -1,1 +1,18 @@
 %h1 All Licenses
+
+%table#licenses
+  %thead
+    %tr
+      %th License Id
+      %th Organization Name
+      %th Edition
+      %th License Type
+      %th Start Date
+  %tbody#licenselist
+    - @licenses.each do |license|
+      %tr
+        %td= license['licenseId']
+        %td= license['organisationName']
+        %td= license['edition']
+        %td= license['licenseType']
+        %td= license['startDate']
