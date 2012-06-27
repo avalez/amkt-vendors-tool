@@ -1,0 +1,12 @@
+%h1 All Licenses
+
+%table#licenses
+  %thead
+    %tr
+      %th Start Date
+      %th Evaluation
+  %tbody#licenselist
+    - @licenses.each do |startDate, license|
+      %tr
+        %td= startDate
+        %td= license['Evaluation']
