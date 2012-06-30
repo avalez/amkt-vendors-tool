@@ -4,9 +4,21 @@
   %thead
     %tr
       %th Start Date
-      %th Evaluation
+      - @all_editions.each do |edition, price|
+        %th= edition
+      
   %tbody#licenselist
     - @licenses.each do |startDate, license|
       %tr
         %td= startDate
-        %td= license['Evaluation']
+        - @all_editions.each do |edition, price|
+          %td= license[edition]
+    %tr
+      %td= 'Total Count'
+      - @total.each do |edition, count|
+        %td= count
+    %tr
+      %td= 'Total Sum'
+      - @total.each do |edition, count|
+        %td= count * @all_editions[edition]
+        
