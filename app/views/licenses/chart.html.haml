@@ -1,0 +1,9 @@
+- content_for(:head) do
+  = javascript_include_tag 'http://www.google.com/jsapi'
+  = javascript_include_tag :gchart
+
+%h1 All Licenses
+
+%div#chart_div{:style => 'width: 1300px; height: 550px;' }
+
+        

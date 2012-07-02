@@ -16,4 +16,23 @@ class LicensesController < ApplicationController
       m
     end
   end
+
+  def chart
+    respond_to do |format|
+      format.html
+      format.json do
+        pivot = License.find(:all).reduce({}) do |m, row|
+          startDate = row['startDate']
+          record = m[startDate] || {}
+          edition = row['edition']
+          record[edition] = 1 + (record[edition] || 0)
+          m[startDate] = record
+          m
+        end
+        json = { :all_editions => License.all_editions,
+          :pivot => pivot}
+        render :json => json
+      end
+    end
+  end
 end
