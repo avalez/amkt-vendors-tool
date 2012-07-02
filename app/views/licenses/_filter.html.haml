@@ -1,7 +1,7 @@
 -# test
 
 = form_tag filter_licenses_path, :method => :post do
-  = hidden_field_tag 'return_url', return_url
+  = hidden_field_tag 'return_to', return_to
   Include: 
   - @all_editions.each do |edition, price|
     = edition

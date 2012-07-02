@@ -1,17 +1,29 @@
 class LicensesController < ApplicationController
-  def index
-    session[:editions] = params[:editions] || session[:editions]
+  def licenses
     @licenses = License.find session[:editions] ? session[:editions].keys : :all
+  end
+
+  def restful
+    if (params[:editions] != session[:editions])
+      redirect_to :action => action_name, :editions => session[:editions]
+    end
+    session[:editions] = params[:editions] || session[:editions]
+  end
+
+  def index
+    restful
+    licenses
     @all_editions = License.all_editions
   end
 
   def filter
     session[:editions] = params[:editions]
-    redirect_to params[:return_url], :editions => session[:editions]
+    redirect_to send params[:return_to], :editions => session[:editions]
   end
-
-  def pivot
-    index
+  
+  def pivot_licenses
+    licenses
+    @all_editions = License.all_editions
     @total = Hash[@all_editions.map {|edition, price| [edition, 0]}]
     @pivot = @licenses.reduce({}) do |m, row|
       startDate = row['startDate']
@@ -24,12 +36,19 @@ class LicensesController < ApplicationController
     end
   end
 
+  def pivot
+    restful
+    pivot_licenses
+  end
+
   def chart
-    @all_editions = License.all_editions
     respond_to do |format|
-      format.html
+      format.html do
+        restful
+        @all_editions = License.all_editions
+      end
       format.json do
-        pivot
+        pivot_licenses
         json = { :all_editions => @all_editions,
           :pivot => @pivot}
         render :json => json

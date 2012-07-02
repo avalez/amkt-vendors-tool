@@ -14,6 +14,8 @@ AmktClient::Application.routes.draw do
   resources :licenses do
     collection do
       get 'pivot'
+      get 'chart'
+      post 'filter'
     end
   end
 
