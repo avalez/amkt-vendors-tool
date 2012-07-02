@@ -1,4 +1,8 @@
+= render 'nav'
+
 %h1 All Licenses
+
+= render 'filter', :return_url => pivot_licenses_path
 
 %table#licenses
   %thead
@@ -7,8 +11,8 @@
       - @all_editions.each do |edition, price|
         %th= edition
       
-  %tbody#licenselist
-    - @licenses.each do |startDate, license|
+  %tbody#pivot
+    - @pivot.each do |startDate, license|
       %tr
         %td= startDate
         - @all_editions.each do |edition, price|
@@ -22,3 +26,4 @@
       - @total.each do |edition, count|
         %td= count * @all_editions[edition]
         
+x

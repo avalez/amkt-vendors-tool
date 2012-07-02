@@ -6,8 +6,13 @@ class License
      '500 Users' => 50, 'Enterprise 10000+ Users' => 100, 'Unlimited Users' => 100}
   end
 
-  def self.find ignore
+  def self.find filter
     csv_text = File.read('licenseReport.csv')
     csv = CSV.parse(csv_text, :headers => true)
+    if (filter && filter != :all)
+      csv.find_all {|license| filter.index license['edition']}
+    else
+      csv
+    end
   end
 end

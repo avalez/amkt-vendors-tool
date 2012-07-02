@@ -1,0 +1,9 @@
+-# test
+
+= form_tag filter_licenses_path, :method => :post do
+  = hidden_field_tag 'return_url', return_url
+  Include: 
+  - @all_editions.each do |edition, price|
+    = edition
+    = check_box_tag "editions[#{edition}]", 1, session[:editions] && session[:editions].key?(edition)
+  = submit_tag 'Refresh', :id => 'licenses_submit'

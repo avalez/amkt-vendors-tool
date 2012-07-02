@@ -1,4 +1,8 @@
+= render 'nav'
+
 %h1 All Licenses
+
+= render 'filter', :return_url => licenses_path
 
 %table#licenses
   %thead
