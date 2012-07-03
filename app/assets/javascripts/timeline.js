@@ -13,7 +13,7 @@ function drawChart() {
   var data = new google.visualization.DataTable();
 
   // see https://developers.google.com/chart/interactive/docs/gallery/annotatedtimeline
-  var jqXHR = $.getJSON('chart.json', function(json) {
+  var jqXHR = $.getJSON('timeline.json', function(json) {
     data.addColumn('date', 'Date');
     var i = 1;
     for (edition in json.all_editions) {

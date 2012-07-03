@@ -1,12 +1,12 @@
 - content_for(:head) do
   = javascript_include_tag 'http://www.google.com/jsapi'
-  = javascript_include_tag :gchart
+  = javascript_include_tag :timeline
 
 = render 'nav'
 
 %h1 All Licenses
 
-= render 'filter', :return_to => 'chart_licenses_path'
+= render 'filter', :return_to => 'timeline_licenses_path'
 
 %div#chart_div{:style => 'width: 1300px; height: 550px;' }
 

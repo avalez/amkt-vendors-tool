@@ -14,7 +14,8 @@ AmktClient::Application.routes.draw do
   resources :licenses do
     collection do
       get 'pivot'
-      get 'chart'
+      get 'timeline'
+      get 'geochart'
       post 'filter'
     end
   end

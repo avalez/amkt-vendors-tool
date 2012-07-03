@@ -41,7 +41,7 @@ class LicensesController < ApplicationController
     pivot_licenses
   end
 
-  def chart
+  def timeline
     respond_to do |format|
       format.html do
         restful
@@ -49,7 +49,7 @@ class LicensesController < ApplicationController
       end
       format.json do
         pivot_licenses
-        json = { :all_editions => @all_editions,
+        json = { :all_editions => session[:editions] || @all_editions,
           :pivot => @pivot}
         render :json => json
       end
