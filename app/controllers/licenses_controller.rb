@@ -55,4 +55,27 @@ class LicensesController < ApplicationController
       end
     end
   end
+
+  def geo_licenses
+    licenses
+    @geo = @licenses.reduce({}) do |m, row|
+      country = row['technicalContactCountry']
+      m[country] = 1 + (m[country] || 0)
+      m
+    end
+  end
+
+  def geochart
+    respond_to do |format|
+      format.html do
+        restful
+        @all_editions = License.all_editions
+      end
+      format.json do
+        geo_licenses
+        json = { :geo => @geo}
+        render :json => json
+      end
+    end
+  end
 end
