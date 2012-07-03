@@ -2,8 +2,17 @@
 
 = form_tag filter_licenses_path, :method => :post do
   = hidden_field_tag 'return_to', return_to
-  Include: 
+  Include:<br/>
+  Editions: 
   - @all_editions.each do |edition, price|
-    = edition
     = check_box_tag "editions[#{edition}]", 1, session[:editions] && session[:editions].key?(edition)
+    = edition
+  <br/>
+  - if (defined? countries)
+    Countries: 
+    - @geo.each do |country, num_of_licenses|
+      = check_box_tag "countries[#{country}]", 1, session[:countries] && session[:countries].key?(country)
+      #{country}&nbsp;(#{num_of_licenses})
+    <br/>
   = submit_tag 'Refresh', :id => 'licenses_submit'
+      

@@ -1,24 +1,37 @@
 class LicensesController < ApplicationController
   def licenses
-    @licenses = License.find session[:editions] ? session[:editions].keys : :all
+    filter = {}
+    if (session[:editions])
+      filter['edition'] = session[:editions].keys
+    end
+    if (session[:countries])
+      filter['technicalContactCountry'] = session[:countries].keys
+    end
+    @licenses = License.find filter
   end
 
   def restful
-    if (params[:editions] != session[:editions])
-      redirect_to :action => action_name, :editions => session[:editions]
+    if (params[:editions] != session[:editions] ||
+        params[:countries] != session[:countries])
+      redirect_to :action => action_name, :editions => session[:editions], :countries => session[:countries]
+    else
+      session[:editions] = params[:editions] || session[:editions]
+      session[:countries] = params[:countries] || session[:countries]
     end
-    session[:editions] = params[:editions] || session[:editions]
   end
 
   def index
     restful
     licenses
+    geo
+    @all_countries = @geo.keys
     @all_editions = License.all_editions
   end
 
   def filter
     session[:editions] = params[:editions]
-    redirect_to send params[:return_to], :editions => session[:editions]
+    session[:countries] = params[:countries]
+    redirect_to send params[:return_to], :editions => session[:editions], :counties => session[:editions]
   end
   
   def pivot_licenses
@@ -58,6 +71,10 @@ class LicensesController < ApplicationController
 
   def geo_licenses
     licenses
+    geo
+  end
+
+  def geo
     @geo = @licenses.reduce({}) do |m, row|
       country = row['technicalContactCountry']
       m[country] = 1 + (m[country] || 0)

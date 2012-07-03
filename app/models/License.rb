@@ -9,10 +9,8 @@ class License
   def self.find filter
     csv_text = File.read('licenseReport.csv')
     csv = CSV.parse(csv_text, :headers => true)
-    if (filter && filter != :all)
-      csv.find_all {|license| filter.index license['edition']}
-    else
-      csv
-    end
+    puts filter
+    filter.each {|key, values| csv = csv.find_all {|license| values.index license[key]}}
+    csv
   end
 end
