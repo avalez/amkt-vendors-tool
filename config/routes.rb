@@ -16,6 +16,7 @@ AmktClient::Application.routes.draw do
       get 'pivot'
       get 'timeline'
       get 'geochart'
+      get 'notbought'
       post 'filter'
     end
   end

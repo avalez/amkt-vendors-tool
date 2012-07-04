@@ -1,6 +1,6 @@
 = render 'nav'
 
-%h1 All Licenses
+%h1 All Licenses (#{@licenses.size})
 
 = render 'filter', :return_to => 'licenses_path', :countries => true
 
@@ -9,6 +9,7 @@
     %tr
       %th License Id
       %th Organization Name
+      %th Country
       %th Edition
       %th License Type
       %th Start Date
@@ -17,6 +18,7 @@
       %tr
         %td= license['licenseId']
         %td= license['organisationName']
+        %td= license['technicalContactCountry']
         %td= license['edition']
         %td= license['licenseType']
         %td= license['startDate']

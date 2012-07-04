@@ -28,6 +28,23 @@ class LicensesController < ApplicationController
     @all_editions = License.all_editions
   end
 
+  def notbought
+    index
+    @licenses = @licenses.sort_by {|license| license['organisationName']}
+    @licenses_map = @licenses.reduce({}) do |m, license|
+      organisationName = license['organisationName'] || 'N/A'
+      licenses = m[organisationName] || []
+      licenses <<= license
+      m[organisationName] = licenses
+      m
+    end
+    @licenses_map = @licenses_map.select do |organisationName, licenses|
+      licenses.index {|license| license['edition'] != 'Evaluation'} == nil
+    end
+    @licenses = @licenses_map.values.flatten 1
+    render :action => 'index'
+  end
+
   def filter
     session[:editions] = params[:editions]
     session[:countries] = params[:countries]
