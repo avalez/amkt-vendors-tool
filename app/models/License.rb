@@ -10,7 +10,7 @@ class License
     csv_text = File.read('licenseReport.csv')
     csv = CSV.parse(csv_text, :headers => true)
     puts filter
-    filter.each {|key, values| csv = csv.find_all {|license| values.index license[key]}}
+    filter.each {|key, values| csv = csv.find_all {|license| values.index(license[key] || 'N/A')}}
     csv
   end
 end

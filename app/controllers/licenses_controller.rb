@@ -76,10 +76,11 @@ class LicensesController < ApplicationController
 
   def geo
     @geo = @licenses.reduce({}) do |m, row|
-      country = row['technicalContactCountry']
+      country = row['technicalContactCountry'] || 'N/A'
       m[country] = 1 + (m[country] || 0)
       m
     end
+    @geo = Hash[@geo.sort_by {|country, count| country}]
   end
 
   def geochart
