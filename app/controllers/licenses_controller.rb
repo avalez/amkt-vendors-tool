@@ -28,6 +28,12 @@ class LicensesController < ApplicationController
     @all_editions = License.all_editions
   end
 
+  def bought
+    index
+    @licenses = @licenses.find_all {|license| License.paid_licenseTypes.include? license['licenseType']}
+    render :action => 'index'
+  end
+
   def notbought
     index
     @licenses = @licenses.sort_by {|license| license['organisationName']}

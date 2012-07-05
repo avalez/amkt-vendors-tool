@@ -13,10 +13,11 @@ AmktClient::Application.routes.draw do
   # maps HTTP verbs to controller actions automatically:
   resources :licenses do
     collection do
+      get 'bought'
+      get 'notbought'
       get 'pivot'
       get 'timeline'
       get 'geochart'
-      get 'notbought'
       post 'filter'
     end
   end
