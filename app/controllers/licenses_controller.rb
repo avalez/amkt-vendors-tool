@@ -58,7 +58,6 @@ class LicensesController < ApplicationController
     licenses
     geo
     @all_countries = @geo.keys
-    @all_editions = License.all_editions
   end
 
   def bought
@@ -91,7 +90,6 @@ class LicensesController < ApplicationController
 
   def pivot_licenses
     licenses
-    @all_editions = License.all_editions
     @total = Hash[@all_editions.map {|edition, price| [edition, 0]}]
     @pivot = @licenses.reduce({}) do |m, row|
       startDate = row['startDate']

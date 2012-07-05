@@ -47,7 +47,6 @@ class License
         csv = csv.find_all { |license| values === Date.parse(license['startDate'])}
       end
     end
-      
     csv.map {|license| license['price'] = price license}
     csv
   end
