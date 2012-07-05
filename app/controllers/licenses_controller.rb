@@ -34,7 +34,12 @@ class LicensesController < ApplicationController
     @licenses_map = @licenses.reduce({}) do |m, license|
       organisationName = license['organisationName'] || 'N/A'
       licenses = m[organisationName] || []
-      licenses <<= license
+      i = licenses.index {|l| l['edition'] == license['edition']}
+      if (!i)
+        licenses <<= license
+      elsif licenses[i]['startDate'] < license['startDate']
+        licenses[i] = license
+      end
       m[organisationName] = licenses
       m
     end
