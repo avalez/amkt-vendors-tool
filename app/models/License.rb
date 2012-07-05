@@ -1,4 +1,4 @@
-require 'csv'    
+require 'csv'
 
 class License 
   @@commercial_purchase =
@@ -39,8 +39,16 @@ class License
   def self.find filter
     csv_text = File.read('licenseReport.csv')
     csv = CSV.parse(csv_text, :headers => true)
+    filter.each do |key, values|
+      case key
+      when 'edition', 'technicalContactCountry'
+        csv = csv.find_all { |license| values.index(license[key] || 'N/A')}
+      when :range
+        csv = csv.find_all { |license| values === Date.parse(license['startDate'])}
+      end
+    end
+      
     csv.map {|license| license['price'] = price license}
-    filter.each {|key, values| csv = csv.find_all {|license| values.index(license[key] || 'N/A')}}
     csv
   end
 end

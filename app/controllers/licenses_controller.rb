@@ -1,5 +1,15 @@
 class LicensesController < ApplicationController
+  def defaults
+    @fromDate = Date.new(2012,04,28)
+    @toDate = Date.new(2012,12,28)
+    if (session[:fromDate] && session[:toDate])
+      @fromDate = date session[:fromDate]
+      @toDate = date session[:toDate]
+    end
+    @all_editions = License.all_editions
+  end
   def licenses
+    defaults
     filter = {}
     if (session[:editions])
       filter['edition'] = session[:editions].keys
@@ -7,19 +17,42 @@ class LicensesController < ApplicationController
     if (session[:countries])
       filter['technicalContactCountry'] = session[:countries].keys
     end
+    if (session[:fromDate] && session[:toDate])
+      filter[:range] = @fromDate .. @toDate
+    end
     @licenses = License.find filter
+  end
+
+  def date param
+    Date.civil(param[:year].to_i, param[:month].to_i, param[:day].to_i)
   end
 
   def restful
     if (params[:editions] != session[:editions] ||
-        params[:countries] != session[:countries])
-      redirect_to :action => action_name, :editions => session[:editions], :countries => session[:countries]
+        params[:countries] != session[:countries] ||
+        params[:fromDate] != session[:fromDate] ||
+        params[:toDate] != session[:toDate])
+      redirect_to :action => action_name,
+        :editions => session[:editions], :countries => session[:countries],
+        :fromDate => session[:fromDate], :toDate => session[:toDate]
     else
       session[:editions] = params[:editions] || session[:editions]
       session[:countries] = params[:countries] || session[:countries]
+      session[:fromDate] = params[:fromDate] || session[:fromDate]
+      session[:toDate] = params[:toDate] || session[:toDate]
     end
   end
 
+  def filter
+    session[:editions] = params[:editions]
+    session[:countries] = params[:countries]
+    session[:fromDate] = params[:fromDate]
+    session[:toDate] = params[:toDate]
+    redirect_to send params[:return_to],
+      :editions => session[:editions], :countries => session[:countries],
+      :fromDate => session[:fromDate], :toDate => session[:toDate]
+  end
+  
   def index
     restful
     licenses
@@ -56,12 +89,6 @@ class LicensesController < ApplicationController
     render :action => 'index'
   end
 
-  def filter
-    session[:editions] = params[:editions]
-    session[:countries] = params[:countries]
-    redirect_to send params[:return_to], :editions => session[:editions], :counties => session[:editions]
-  end
-  
   def pivot_licenses
     licenses
     @all_editions = License.all_editions
@@ -86,6 +113,7 @@ class LicensesController < ApplicationController
     respond_to do |format|
       format.html do
         restful
+        defaults
         @all_editions = License.all_editions
       end
       format.json do
@@ -115,7 +143,7 @@ class LicensesController < ApplicationController
     respond_to do |format|
       format.html do
         restful
-        @all_editions = License.all_editions
+        defaults
       end
       format.json do
         geo_licenses
