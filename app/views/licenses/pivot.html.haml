@@ -11,12 +11,12 @@
       - @all_editions.each do |edition, price|
         %th= edition
   %tbody#pivot
+    %tr
+      %td= 'Total Count'
+      - @total.each do |edition, count|
+        %td= count
     - @pivot.each do |startDate, license|
       %tr
         %td= startDate
         - @all_editions.each do |edition, price|
           %td= license[edition]
-    %tr
-      %td= 'Total Count'
-      - @total.each do |edition, count|
-        %td= count
