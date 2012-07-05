@@ -13,6 +13,7 @@
       %th Edition
       %th License Type
       %th Start Date
+      %th Price
   %tbody#licenselist
     - @licenses.each do |license|
       %tr
@@ -22,3 +23,4 @@
         %td= license['edition']
         %td= license['licenseType']
         %td= license['startDate']
+        %td= license['price']

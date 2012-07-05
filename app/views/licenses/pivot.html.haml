@@ -10,7 +10,6 @@
       %th Start Date
       - @all_editions.each do |edition, price|
         %th= edition
-      
   %tbody#pivot
     - @pivot.each do |startDate, license|
       %tr
@@ -21,9 +20,3 @@
       %td= 'Total Count'
       - @total.each do |edition, count|
         %td= count
-    %tr
-      %td= 'Total Sum'
-      - @total.each do |edition, count|
-        %td= count * @all_editions[edition]
-        
-x
