@@ -35,11 +35,13 @@ class LicensesController < ApplicationController
       redirect_to :action => action_name,
         :editions => session[:editions], :countries => session[:countries],
         :fromDate => session[:fromDate], :toDate => session[:toDate]
+      return false
     else
       session[:editions] = params[:editions] || session[:editions]
       session[:countries] = params[:countries] || session[:countries]
       session[:fromDate] = params[:fromDate] || session[:fromDate]
       session[:toDate] = params[:toDate] || session[:toDate]
+      return true
     end
   end
 
@@ -54,7 +56,7 @@ class LicensesController < ApplicationController
   end
   
   def index
-    restful
+    restful or return false
     licenses
     geo
     @sum = @licenses.reduce(0) {|sum, license| sum + (license['price'] || 0)}
@@ -62,13 +64,13 @@ class LicensesController < ApplicationController
   end
 
   def bought
-    index
+    index or return
     @licenses = @licenses.find_all {|license| License.paid_licenseTypes.include? license['licenseType']}
     render :action => 'index'
   end
 
   def notbought
-    index
+    index or return
     @licenses = @licenses.sort_by {|license| license['organisationName']}
     @licenses_map = @licenses.reduce({}) do |m, license|
       organisationName = license['organisationName'] || 'N/A'
