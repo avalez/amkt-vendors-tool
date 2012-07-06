@@ -88,6 +88,7 @@ class LicensesController < ApplicationController
       licenses.index {|license| license['edition'] != 'Evaluation'} == nil
     end
     @licenses = @licenses_map.values.flatten 1
+    @sum = 0
     render :action => 'index'
   end
 

@@ -36,6 +36,8 @@ class License
       @@commercial_purchase[edition]
     when 'Academic'
       @@academic_purchase[edition]
+    else
+      0
     end
     year_price += (year_price.to_f / 2).ceil * extra_years
   end
