@@ -1,6 +1,6 @@
 = render 'nav'
 
-%h1 All Licenses (#{@licenses.size})
+%h1 All Licenses (#{@licenses.size}|$#{@sum})
 
 = render 'filter', :return_to => 'licenses_path', :countries => true
 
@@ -13,6 +13,7 @@
       %th Edition
       %th License Type
       %th Start Date
+      %th End Date
       %th Price
   %tbody#licenselist
     - @licenses.each do |license|
@@ -23,4 +24,5 @@
         %td= license['edition']
         %td= license['licenseType']
         %td= license['startDate']
+        %td= license['endDate']
         %td= license['price']

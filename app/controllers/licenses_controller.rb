@@ -57,6 +57,7 @@ class LicensesController < ApplicationController
     restful
     licenses
     geo
+    @sum = @licenses.reduce(0) {|sum, license| sum + (license['price'] || 0)}
     @all_countries = @geo.keys
   end
 
