@@ -1,7 +1,41 @@
-== Welcome to Rails
+== AMKT Vendors' Tool
 
-Rails is a web-application framework that includes everything needed to create
-database-backed web applications according to the Model-View-Control pattern.
+This is simple web-application to help analyze data provided by Atlassian Marketplace.
+It is only useful for vendors of add-ons to Atlassian products paid with Atlassian.
+However it may be also interesting as example of using Ruby on Rails to quickly
+implement small business tool.
+
+At current stage it reads licenseReport.csv from application home and allows to see
+licenses filtered by editions, countries and date range. Also it provides timeline and
+geographical visualizations using Google Charts.
+
+With this tool it is possible to:
+
+1. Determine potential customers, those who've got Evaluation license, but did not
+ buy commercial license after it. 
+
+2. See sales trend.
+
+3. Verify earnings for period.
+
+To use it 
+
+  $ git clone https://github.com/avalez/amkt-vendors-tool
+  $ cd amkt-vedors-tool
+  $ bundle install --without production
+  $ rails server
+
+Then go to http://localhost:3000/licenses
+
+IMPORTANT, You'll need to put licenseReport.csv into 'amkt-vendors-tool' dir and
+to really use it, edit License.rb and specify your prices for your add-on.
+
+This software can be used without any warranties or restrictions of use and redistribution.
+
+Bellow follows a little bit adjusted standard Ruby on Rails readme.
+
+This application is written using Rails web-application framework that includes everything
+needed to create database-backed web applications according to the Model-View-Control pattern.
 
 This pattern splits the view (also called the presentation) into "dumb"
 templates that are primarily responsible for inserting pre-built data in between
@@ -27,18 +61,6 @@ link:files/vendor/rails/actionpack/README.html.
 
 
 == Getting Started
-
-1. At the command prompt, create a new Rails application:
-       <tt>rails new myapp</tt> (where <tt>myapp</tt> is the application name)
-
-2. Change directory to <tt>myapp</tt> and start the web server:
-       <tt>cd myapp; rails server</tt> (run with --help for options)
-
-3. Go to http://localhost:3000/ and you'll see:
-       "Welcome aboard: You're riding Ruby on Rails!"
-
-4. Follow the guidelines to start developing your application. You can find
-the following resources handy:
 
 * The Getting Started Guide: http://guides.rubyonrails.org/getting_started.html
 * Ruby on Rails Tutorial Book: http://www.railstutorial.org/
