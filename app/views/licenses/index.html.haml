@@ -9,6 +9,8 @@
     %tr
       %th License Id
       %th Organization Name
+      %th Email
+      %th Count
       %th Country
       %th Edition
       %th License Type
@@ -20,9 +22,16 @@
       %tr
         %td= license['licenseId']
         %td= license['organisationName']
+        %td= mail_to license['technicalContactEmail'], license['technicalContactName']
+        %td= license['count']
         %td= license['technicalContactCountry']
         %td= license['edition']
         %td= license['licenseType']
         %td= license['startDate']
         %td= license['endDate']
         %td= license['price']
+
+-#- @licenses.each do |license|
+-#  #{license['technicalContactName']} &lt;#{license['technicalContactEmail']}&gt;,<br/>
+
+

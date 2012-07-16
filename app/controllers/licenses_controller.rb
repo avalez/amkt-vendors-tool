@@ -61,11 +61,13 @@ class LicensesController < ApplicationController
     geo
     @sum = @licenses.reduce(0) {|sum, license| sum + (license['price'] || 0)}
     @all_countries = @geo.keys
+    @licenses = @licenses.sort_by {|license| license['organisationName']}
   end
 
   def bought
     index or return
     @licenses = @licenses.find_all {|license| License.paid_licenseTypes.include? license['licenseType']}
+    @licenses = @licenses.sort_by {|license| license['endDate']}
     render :action => 'index'
   end
 
@@ -77,9 +79,13 @@ class LicensesController < ApplicationController
       licenses = m[organisationName] || []
       i = licenses.index {|l| l['edition'] == license['edition']}
       if (!i)
+        license['count'] = 1
         licenses <<= license
       elsif licenses[i]['startDate'] < license['startDate']
+        license['count'] = licenses[i]['count'] + 1
         licenses[i] = license
+      else
+        licenses[i]['count'] += 1
       end
       m[organisationName] = licenses
       m
@@ -88,6 +94,8 @@ class LicensesController < ApplicationController
       licenses.index {|license| license['edition'] != 'Evaluation'} == nil
     end
     @licenses = @licenses_map.values.flatten 1
+    @licenses = @licenses.find_all {|license| license['endDate'] <= '2012-06-30'}
+    @licenses = @licenses.sort_by {|license| license['endDate']} 
     @sum = 0
     render :action => 'index'
   end
