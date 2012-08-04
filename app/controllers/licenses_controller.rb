@@ -67,7 +67,7 @@ class LicensesController < ApplicationController
   def bought
     index or return
     @licenses = @licenses.find_all {|license| License.paid_licenseTypes.include? license['licenseType']}
-    @licenses = @licenses.sort_by {|license| license['endDate']}
+    @licenses = @licenses.sort_by {|license| license['startDate']}
     render :action => 'index'
   end
 

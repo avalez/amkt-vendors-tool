@@ -3,7 +3,7 @@ require 'csv'
 class License 
   @@commercial_purchase =
     {'Evaluation' => 0, '10 Users' => 10, '25 Users' => 10, '50 Users' => 50, '100 Users' => 50,
-     '500 Users' => 100, 'Enterprise 10000+ Users' => 100, 'Unlimited Users' => 100}
+     '500 Users' => 100, 'Enterprise 500 Users' => 100, 'Enterprise 10000+ Users' => 100, 'Unlimited Users' => 100}
 
   @@commercial_renewal = @@commercial_purchase.reduce({}) { |m, (edition, price)| m[edition] = (price.to_f / 2).ceil; m }
 
@@ -30,9 +30,9 @@ class License
     endDate = Date.parse license['endDate']
     extra_years = endDate.year - startDate.year - 1
     year_price = case licenseType
-    when 'Evaluation'
+    when 'Evaluation', 'Open Source'
       0
-    when 'Commercial', 'Starter', 'Open Source'
+    when 'Commercial', 'Starter'
       @@commercial_purchase[edition]
     when 'Academic'
       @@academic_purchase[edition]
