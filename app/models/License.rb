@@ -3,7 +3,7 @@ require 'csv'
 class License 
   @@commercial_purchase =
     {'Evaluation' => 0, '10 Users' => 10, '25 Users' => 10, '50 Users' => 50, '100 Users' => 50,
-     '500 Users' => 100, 'Enterprise 500 Users' => 100, 'Enterprise 10000+ Users' => 100, 'Unlimited Users' => 100}
+     '500 Users' => 100, 'Enterprise 500 Users' => 100, 'Enterprise 2000 Users' => 100, 'Enterprise 10000+ Users' => 100, 'Unlimited Users' => 100}
 
   @@commercial_renewal = @@commercial_purchase.reduce({}) { |m, (edition, price)| m[edition] = (price.to_f / 2).ceil; m }
 
