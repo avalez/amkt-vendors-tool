@@ -14,9 +14,8 @@
 ActiveRecord::Schema.define(:version => 20120627210517) do
 
   create_table "add_ons", :force => true do |t|
-    t.string  "name"
-    t.string  "key"
-    t.integer "contact_id"
+    t.string "name"
+    t.string "key"
   end
 
   create_table "addresses", :force => true do |t|

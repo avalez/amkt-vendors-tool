@@ -75,7 +75,7 @@ class License < ActiveRecord::Base
     billingContact = Contact.find_or_create_by_email row['billingContactEmail'],
       :name => row['billingContactName'], :phone => row['billingContactPhone']
     license = License.find_or_create_by_licenseId row['licenseId'],
-      :organisationName => row['organisationName'], :addOn_id => addOn,
+      :organisationName => row['organisationName'], :addOn => addOn,
       :technicalContact_id => technicalContact,
       :technicalContactAddress_id => technicalContactAddress,
       :billingContact_id => billingContact,
@@ -85,4 +85,9 @@ class License < ActiveRecord::Base
 
     [addOn, technicalContact, technicalContactAddress, billingContact, license]
   end
+
+  belongs_to :addOn
+  belongs_to :contact #as technicalContact and billingContact
+  belongs_to :address #as technicalContactAddress
+
 end
