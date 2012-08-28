@@ -65,7 +65,24 @@ class License < ActiveRecord::Base
     csv_text = File.read('licenseReport.csv')
     csv = CSV.parse(csv_text, :headers => true)
     row = csv.first
-    addOn = AddOn.find_or_create_by_key_and_name row['addOnKey'], row['addOnName']
-    addOn.name
+    addOn = AddOn.find_or_create_by_key row['addOnKey'], :name => row['addOnName']
+    technicalContact = Contact.find_or_create_by_email row['technicalContactEmail'],
+      :name => row['technicalContactName'], :phone => row['technicalContactPhone']
+    technicalContactAddress = Address.find_or_create_by_address1_and_postcode row['technicalContactAddress1'],
+      :address2 => row['technicalContactAddress2'], :city => row['technicalContactCity'],
+      :state => row['technicalContactState'], :postcode => row['technicalContactPostcode'],
+      :country => row['technicalContactCountry']
+    billingContact = Contact.find_or_create_by_email row['billingContactEmail'],
+      :name => row['billingContactName'], :phone => row['billingContactPhone']
+    license = License.find_or_create_by_licenseId row['licenseId'],
+      :organisationName => row['organisationName'], :addOn_id => addOn,
+      :technicalContact_id => technicalContact,
+      :technicalContactAddress_id => technicalContactAddress,
+      :billingContact_id => billingContact,
+      :edition => row['edition'], :licenseType => row['licenseType'],
+      :startDate => row['startDate'], :endDate => row['endDate'],
+      :renewalAction => row['renewalAction']
+
+    [addOn, technicalContact, technicalContactAddress, billingContact, license]
   end
 end

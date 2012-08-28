@@ -20,11 +20,11 @@ ActiveRecord::Schema.define(:version => 20120627210517) do
   end
 
   create_table "addresses", :force => true do |t|
-    t.string "address_1"
-    t.string "address_2"
+    t.string "address1"
+    t.string "address2"
     t.string "city"
     t.string "state"
-    t.string "post_code"
+    t.string "postcode"
     t.string "country"
   end
 
@@ -35,17 +35,17 @@ ActiveRecord::Schema.define(:version => 20120627210517) do
   end
 
   create_table "licenses", :force => true do |t|
-    t.string  "license_id"
-    t.string  "organisation_name"
-    t.integer "add_on_id"
-    t.integer "technical_contact_id"
-    t.integer "technical_contact_address_id"
-    t.integer "billing_contact_id"
+    t.string  "licenseId"
+    t.string  "organisationName"
+    t.integer "addOn_id"
+    t.integer "technicalContact_id"
+    t.integer "technicalContactAddress_id"
+    t.integer "billingContact_id"
     t.string  "edition"
-    t.string  "license_type"
-    t.string  "start_date"
-    t.string  "end_date"
-    t.string  "renewal_action"
+    t.string  "licenseType"
+    t.string  "startDate"
+    t.string  "endDate"
+    t.string  "renewalAction"
   end
 
 end

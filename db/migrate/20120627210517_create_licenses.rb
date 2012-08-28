@@ -1,17 +1,17 @@
 class CreateLicenses < ActiveRecord::Migration
   def up
     create_table :licenses do |t|
-      t.string :license_id
-      t.string :organisation_name
-      t.references :add_on
-      t.column :technical_contact_id, :integer, :references => :contact
-      t.column :technical_contact_address_id, :integer, :references => :address
-      t.column :billing_contact_id, :integer, :references => :contact
+      t.string :licenseId
+      t.string :organisationName
+      t.references :addOn
+      t.column :technicalContact_id, :integer, :references => :contact
+      t.column :technicalContactAddress_id, :integer, :references => :address
+      t.column :billingContact_id, :integer, :references => :contact
       t.string :edition
-      t.string :license_type
-      t.string :start_date
-      t.string :end_date
-      t.string :renewal_action
+      t.string :licenseType
+      t.string :startDate
+      t.string :endDate
+      t.string :renewalAction
     end
 
     # it's impossible to set string primary key, see
@@ -21,7 +21,6 @@ class CreateLicenses < ActiveRecord::Migration
     create_table :add_ons do |t|
       t.string :name
       t.string :key
-      t.references :contact
     end
 
     create_table :contacts do |t|
@@ -31,11 +30,11 @@ class CreateLicenses < ActiveRecord::Migration
     end
 
     create_table :addresses do |t|
-      t.string :address_1
-      t.string :address_2
+      t.string :address1
+      t.string :address2
       t.string :city
       t.string :state
-      t.string :post_code
+      t.string :postcode
       t.string :country
     end
   end
