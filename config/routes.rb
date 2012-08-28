@@ -19,6 +19,7 @@ AmktClient::Application.routes.draw do
       get 'timeline'
       get 'geochart'
       post 'filter'
+      get 'import'
     end
   end
 

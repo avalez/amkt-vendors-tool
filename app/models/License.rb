@@ -1,4 +1,6 @@
 require 'csv'
+require 'rubygems'
+require 'neography'
 
 class License 
   @@commercial_purchase =
@@ -55,5 +57,16 @@ class License
     end
     csv.map {|license| license['price'] = price license}
     csv
+  end
+
+  def self.create_license(csv_row)
+    
+  end
+
+  def self.import
+    csv_text = File.read('licenseReport.csv')
+    csv = CSV.parse(csv_text, :headers => true)
+    row = csv.first
+    org = Organization.get row['organizationName']
   end
 end

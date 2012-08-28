@@ -162,4 +162,8 @@ class LicensesController < ApplicationController
       end
     end
   end
+
+  def import
+    @log = License.import
+  end
 end
