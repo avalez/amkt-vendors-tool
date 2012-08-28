@@ -13,9 +13,10 @@
 
 ActiveRecord::Schema.define(:version => 20120627210517) do
 
-  create_table "add_ons", :id => false, :force => true do |t|
-    t.string "add_on_name"
-    t.string "add_on_key"
+  create_table "add_ons", :force => true do |t|
+    t.string  "name"
+    t.string  "key"
+    t.integer "contact_id"
   end
 
   create_table "addresses", :force => true do |t|
@@ -30,22 +31,21 @@ ActiveRecord::Schema.define(:version => 20120627210517) do
   create_table "contacts", :force => true do |t|
     t.string "email"
     t.string "name"
+    t.string "phone"
   end
 
-  create_table "licenses", :id => false, :force => true do |t|
+  create_table "licenses", :force => true do |t|
     t.string  "license_id"
     t.string  "organisation_name"
     t.integer "add_on_id"
-    t.integer "technical_contact"
-    t.integer "technical_contact_address"
-    t.integer "billing_contact"
+    t.integer "technical_contact_id"
+    t.integer "technical_contact_address_id"
+    t.integer "billing_contact_id"
     t.string  "edition"
     t.string  "license_type"
     t.string  "start_date"
-  end
-
-  create_table "organisations", :id => false, :force => true do |t|
-    t.string "organisation_name"
+    t.string  "end_date"
+    t.string  "renewal_action"
   end
 
 end
