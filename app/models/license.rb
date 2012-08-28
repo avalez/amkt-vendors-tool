@@ -64,7 +64,8 @@ class License < ActiveRecord::Base
   def self.import
     csv_text = File.read('licenseReport.csv')
     csv = CSV.parse(csv_text, :headers => true)
-    row = csv.first  
-    #org = Organization.get row['organizationName']
+    row = csv.first
+    addOn = AddOn.find_or_create_by_key_and_name row['addOnKey'], row['addOnName']
+    addOn.name
   end
 end
