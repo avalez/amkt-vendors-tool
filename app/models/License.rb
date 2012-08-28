@@ -1,8 +1,6 @@
 require 'csv'
-require 'rubygems'
-require 'neography'
 
-class License 
+class License < ActiveRecord::Base
   @@commercial_purchase =
     {'Evaluation' => 0, '10 Users' => 10, '25 Users' => 10, '50 Users' => 50, '100 Users' => 50,
      '500 Users' => 100, 'Enterprise 500 Users' => 100, 'Enterprise 2000 Users' => 100, 'Enterprise 10000+ Users' => 100, 'Unlimited Users' => 100}
@@ -66,7 +64,7 @@ class License
   def self.import
     csv_text = File.read('licenseReport.csv')
     csv = CSV.parse(csv_text, :headers => true)
-    row = csv.first
-    org = Organization.get row['organizationName']
+    row = csv.first  
+    #org = Organization.get row['organizationName']
   end
 end

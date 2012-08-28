@@ -13,14 +13,39 @@
 
 ActiveRecord::Schema.define(:version => 20120627210517) do
 
-  create_table "licenses", :force => true do |t|
-    t.string   "license_id"
-    t.string   "organization_name"
-    t.string   "edition"
-    t.string   "license_type"
-    t.string   "start_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "add_ons", :id => false, :force => true do |t|
+    t.string "add_on_name"
+    t.string "add_on_key"
+  end
+
+  create_table "addresses", :force => true do |t|
+    t.string "address_1"
+    t.string "address_2"
+    t.string "city"
+    t.string "state"
+    t.string "post_code"
+    t.string "country"
+  end
+
+  create_table "contacts", :force => true do |t|
+    t.string "email"
+    t.string "name"
+  end
+
+  create_table "licenses", :id => false, :force => true do |t|
+    t.string  "license_id"
+    t.string  "organisation_name"
+    t.integer "add_on_id"
+    t.integer "technical_contact"
+    t.integer "technical_contact_address"
+    t.integer "billing_contact"
+    t.string  "edition"
+    t.string  "license_type"
+    t.string  "start_date"
+  end
+
+  create_table "organisations", :id => false, :force => true do |t|
+    t.string "organisation_name"
   end
 
 end
