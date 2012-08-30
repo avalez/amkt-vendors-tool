@@ -20,15 +20,15 @@
   %tbody#licenselist
     - @licenses.each do |license|
       %tr
-        %td= license['licenseId']
-        %td= license['organisationName']
-        %td= mail_to license['technicalContactEmail'], license['technicalContactName']
+        %td= license.licenseId
+        %td= license.organisationName
+        %td= mail_to license.technicalContact.email, license.technicalContact.name
         %td= license['count']
-        %td= license['technicalContactCountry']
-        %td= license['edition']
-        %td= license['licenseType']
-        %td= license['startDate']
-        %td= license['endDate']
+        %td= license.technicalContactAddress.country
+        %td= license.edition
+        %td= license.licenseType
+        %td= license.startDate
+        %td= license.endDate
         %td= license['price']
 
 -#- @licenses.each do |license|

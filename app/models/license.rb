@@ -42,7 +42,7 @@ class License < ActiveRecord::Base
     year_price += (year_price.to_f / 2).ceil * extra_years
   end
 
-  def self.find filter
+  def self.csv_find filter
     csv_text = File.read('licenseReport.csv')
     csv = CSV.parse(csv_text, :headers => true)
     filter.each do |key, values|
@@ -87,7 +87,8 @@ class License < ActiveRecord::Base
   end
 
   belongs_to :addOn
-  belongs_to :contact #as technicalContact and billingContact
-  belongs_to :address #as technicalContactAddress
+  has_one :technicalContact, :foreign_key => 'id', :class_name => "Contact"
+  has_one :technicalContactAddress, :foreign_key => 'id', :class_name => "Address"
+  has_one :billingContact, :foreign_key => 'id', :class_name => "Contact"
 
 end

@@ -18,9 +18,9 @@ class LicensesController < ApplicationController
       filter['technicalContactCountry'] = session[:countries].keys
     end
     if (session[:fromDate] && session[:toDate])
-      filter[:range] = @fromDate .. @toDate
+      filter[:startDate] = @fromDate .. @toDate
     end
-    @licenses = License.find filter
+    @licenses = License.where filter
   end
 
   def date param
@@ -61,6 +61,9 @@ class LicensesController < ApplicationController
     geo
     @sum = @licenses.reduce(0) {|sum, license| sum + (license['price'] || 0)}
     @all_countries = @geo.keys
+    #@licenses = @licenses.select("*, count(*) as count").includes([:technicalContact]).
+    #  group("licenseId", "organisationName",
+    #  "technicalContact_id", "technicalContactAddress_id", "edition", "licenseType", "startDate", "endDate")
     @licenses = @licenses.sort_by {|license| license['organisationName']}
   end
 
