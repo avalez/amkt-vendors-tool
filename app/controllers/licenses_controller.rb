@@ -20,7 +20,8 @@ class LicensesController < ApplicationController
     if (session[:fromDate] && session[:toDate])
       filter[:startDate] = @fromDate .. @toDate
     end
-    @licenses = License.where filter
+    @licenses = License.where(filter).order(:organisationName)
+    @licenses.map {|license| license['price'] = License.price license}
   end
 
   def date param
@@ -64,7 +65,7 @@ class LicensesController < ApplicationController
     #@licenses = @licenses.select("*, count(*) as count").includes([:technicalContact]).
     #  group("licenseId", "organisationName",
     #  "technicalContact_id", "technicalContactAddress_id", "edition", "licenseType", "startDate", "endDate")
-    @licenses = @licenses.includes([:technicalContact, :technicalContactAddress]).order(:organisationName)
+    @licenses = @licenses.includes([:technicalContact, :technicalContactAddress])
   end
 
   def bought
@@ -171,6 +172,6 @@ class LicensesController < ApplicationController
   end
 
   def show
-    @license = License.find params[:id], :include => :technicalContact
+    @license = License.find params[:id]
   end
 end

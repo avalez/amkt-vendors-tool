@@ -1,6 +1,6 @@
 = render 'nav'
 
-%h1 All Licenses (#{@licenses.size}|$#{@sum})
+%h1 All Licenses (#{@licenses.length}|$#{@sum})
 
 = render 'filter', :return_to => 'licenses_path', :countries => true
 
