@@ -57,14 +57,7 @@ class License < ActiveRecord::Base
     csv
   end
 
-  def self.create_license(csv_row)
-    
-  end
-
-  def self.import
-    csv_text = File.read('licenseReport.csv')
-    csv = CSV.parse(csv_text, :headers => true)
-    row = csv.first
+  def self.import_license row
     addOn = AddOn.find_or_create_by_key row['addOnKey'], :name => row['addOnName']
     technicalContact = Contact.find_or_create_by_email row['technicalContactEmail'],
       :name => row['technicalContactName'], :phone => row['technicalContactPhone']
@@ -76,9 +69,9 @@ class License < ActiveRecord::Base
       :name => row['billingContactName'], :phone => row['billingContactPhone']
     license = License.find_or_create_by_licenseId row['licenseId'],
       :organisationName => row['organisationName'], :addOn => addOn,
-      :technicalContact_id => technicalContact,
-      :technicalContactAddress_id => technicalContactAddress,
-      :billingContact_id => billingContact,
+      :technicalContact_id => technicalContact.id,
+      :technicalContactAddress_id => technicalContactAddress.id,
+      :billingContact_id => billingContact.id,
       :edition => row['edition'], :licenseType => row['licenseType'],
       :startDate => row['startDate'], :endDate => row['endDate'],
       :renewalAction => row['renewalAction']
@@ -86,9 +79,15 @@ class License < ActiveRecord::Base
     [addOn, technicalContact, technicalContactAddress, billingContact, license]
   end
 
+  def self.import
+    csv_text = File.read('licenseReport.csv')
+    csv = CSV.parse(csv_text, :headers => true)
+    csv.map {|license| import_license license}
+  end
+
   belongs_to :addOn
-  has_one :technicalContact, :foreign_key => 'id', :class_name => "Contact"
-  has_one :technicalContactAddress, :foreign_key => 'id', :class_name => "Address"
-  has_one :billingContact, :foreign_key => 'id', :class_name => "Contact"
+  belongs_to :technicalContact, :class_name => "Contact"
+  belongs_to :technicalContactAddress, :class_name => "Address"
+  belongs_to :billingContact, :class_name => "Address"
 
 end
