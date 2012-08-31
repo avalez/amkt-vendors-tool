@@ -64,7 +64,7 @@ class LicensesController < ApplicationController
     #@licenses = @licenses.select("*, count(*) as count").includes([:technicalContact]).
     #  group("licenseId", "organisationName",
     #  "technicalContact_id", "technicalContactAddress_id", "edition", "licenseType", "startDate", "endDate")
-    @licenses = @licenses.sort_by {|license| license['organisationName']}
+    @licenses = @licenses.includes([:technicalContact, :technicalContactAddress]).order(:organisationName)
   end
 
   def bought
@@ -168,5 +168,9 @@ class LicensesController < ApplicationController
 
   def import
     @log = License.import
+  end
+
+  def show
+    @license = License.find params[:id], :include => :technicalContact
   end
 end

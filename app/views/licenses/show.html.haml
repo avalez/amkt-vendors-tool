@@ -1,0 +1,14 @@
+-# in app/views/licenses/show.html.haml
+
+%h2 Details about #{@license.licenseId}
+
+%ul#details
+  %li
+    Technical Contact:
+    = @license.technicalContact.name
+    , 
+    = @license.technicalContact.email
+
+= link_to 'Find Licenses With Same Contact', licenses_path
+= link_to 'Edit', license_path(@license)
+= link_to 'Back to licenses list', licenses_path
