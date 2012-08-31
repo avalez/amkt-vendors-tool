@@ -24,6 +24,11 @@ class LicensesController < ApplicationController
     if (session[:sort])
       @licenses = @licenses.order(session[:sort])
     end
+    #TODO if group
+    #@licenses = @licenses.select("*, count(*) as count").includes([:technicalContact]).
+    #  group("licenseId", "organisationName",
+    #  "technicalContact_id", "technicalContactAddress_id", "edition", "licenseType", "startDate", "endDate")
+    @licenses = @licenses.includes([:technicalContact, :technicalContactAddress])
     @licenses.map {|license| license['price'] = License.price license}
     @current_action = action_name
   end
@@ -75,10 +80,6 @@ class LicensesController < ApplicationController
     geo
     @sum = @licenses.reduce(0) {|sum, license| sum + (license['price'] || 0)}
     @all_countries = @geo.keys
-    #@licenses = @licenses.select("*, count(*) as count").includes([:technicalContact]).
-    #  group("licenseId", "organisationName",
-    #  "technicalContact_id", "technicalContactAddress_id", "edition", "licenseType", "startDate", "endDate")
-    @licenses = @licenses
   end
 
   def bought
