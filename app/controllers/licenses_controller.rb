@@ -174,4 +174,16 @@ class LicensesController < ApplicationController
   def show
     @license = License.find params[:id]
   end
+
+  def edit
+    @license = License.find params[:id]
+  end
+
+  def update
+    @license = License.find params[:id]
+    @license.update_attributes!(params[:license])
+    flash[:notice] = "#{@license.licenseId} was successfully updated."
+    redirect_to license_path(@license)
+  end
+
 end
