@@ -20,8 +20,12 @@ class LicensesController < ApplicationController
     if (session[:fromDate] && session[:toDate])
       filter[:startDate] = @fromDate .. @toDate
     end
-    @licenses = License.where(filter).order(:organisationName)
+    @licenses = License.where(filter)
+    if (session[:sort])
+      @licenses = @licenses.order(session[:sort])
+    end
     @licenses.map {|license| license['price'] = License.price license}
+    @current_action = action_name
   end
 
   def date param
@@ -53,7 +57,16 @@ class LicensesController < ApplicationController
     session[:toDate] = params[:toDate]
     redirect_to send params[:return_to],
       :editions => session[:editions], :countries => session[:countries],
-      :fromDate => session[:fromDate], :toDate => session[:toDate]
+      :fromDate => session[:fromDate], :toDate => session[:toDate],
+      :sort => session[:sort]
+  end
+
+  def sort
+    session[:sort] = params[:sort]
+    redirect_to :action => params[:return_to],
+      :editions => session[:editions], :countries => session[:countries],
+      :fromDate => session[:fromDate], :toDate => session[:toDate],
+      :sort => session[:sort]
   end
   
   def index
@@ -65,7 +78,7 @@ class LicensesController < ApplicationController
     #@licenses = @licenses.select("*, count(*) as count").includes([:technicalContact]).
     #  group("licenseId", "organisationName",
     #  "technicalContact_id", "technicalContactAddress_id", "edition", "licenseType", "startDate", "endDate")
-    @licenses = @licenses.includes([:technicalContact, :technicalContactAddress])
+    @licenses = @licenses
   end
 
   def bought

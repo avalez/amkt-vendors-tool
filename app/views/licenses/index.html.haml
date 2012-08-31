@@ -8,13 +8,13 @@
   %thead
     %tr
       %th License Id
-      %th Organization Name
+      %th{:class => @title_header}= link_to 'Organisation Name', sort_licenses_path(:sort => :organisationName, :return_to => @current_action)
       %th Email
       %th Count
       %th Country
       %th Edition
       %th License Type
-      %th Start Date
+      %th{:class => @title_header}= link_to 'Start Date', sort_licenses_path(:sort => :startDate, :return_to => @current_action)
       %th End Date
       %th Price
   %tbody#licenselist
