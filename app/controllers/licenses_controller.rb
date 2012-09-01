@@ -163,7 +163,7 @@ class LicensesController < ApplicationController
 
   def geo
     @geo = @licenses.reduce({}) do |m, row|
-      country = row['technicalContactCountry'] || 'N/A'
+      country = row.technicalContactAddress.country || 'N/A'
       m[country] = 1 + (m[country] || 0)
       m
     end
