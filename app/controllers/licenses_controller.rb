@@ -190,24 +190,18 @@ class LicensesController < ApplicationController
   end
 
   def get_licenses username, password
-    uri = URI.parse("https://marketplace.atlassian.com/manage/vendors/120")
+    uri = URI.parse("https://marketplace.atlassian.com/login")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    request = Net::HTTP::Get.new(uri.request_uri)
-    response = http.request(request)
-    @log << response['location']
-    cookie = response['set-cookie'].split(';')[0]
-
-    uri = URI.parse(response['location'])
-    request = Net::HTTP::Post.new(uri.request_uri, {'Cookie' => cookie})
+    request = Net::HTTP::Post.new(uri.request_uri)
     request.set_form_data({:redirect => '', :username => username, :password => password})
     response = http.request(request)
-    @log << response['location']
     if (/\/login\?/ =~ response['location'])
       return nil
     end
 
+    cookie = response['set-cookie'].split(';')[0]
     uri = URI.parse("https://marketplace.atlassian.com/manage/vendors/120/licenseReport")
     request = Net::HTTP::Get.new(uri.request_uri, {'Cookie' => cookie})
     response = http.request(request)
