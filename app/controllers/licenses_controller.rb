@@ -206,7 +206,7 @@ class LicensesController < ApplicationController
     request = Net::HTTP::Get.new(uri.request_uri, {'Cookie' => cookie})
     response = http.request(request)
     if (response.code == '200')
-      response.body
+      response.body.force_encoding("UTF-8")
     else
       @log << response.code
       @log << response.body
