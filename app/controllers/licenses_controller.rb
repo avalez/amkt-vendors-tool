@@ -27,11 +27,10 @@ class LicensesController < ApplicationController
     if (session[:sort])
       @licenses = @licenses.order(session[:sort])
     end
-    #TODO if group
-    #@licenses = @licenses.select("*, count(*) as count").includes([:technicalContact]).
-    #  group("licenseId", "organisationName",
-    #  "technicalContact_id", "technicalContactAddress_id", "edition", "licenseType", "startDate", "endDate")
     @licenses = @licenses.includes([:technicalContact, :technicalContactAddress])
+    if block_given?
+      @licenses = yield @licenses
+    end
     @licenses.map {|license| license['price'] = License.price license}
     @current_action = action_name
   end
@@ -122,15 +121,23 @@ class LicensesController < ApplicationController
   end
 
   def pivot_licenses
-    licenses
+    licenses do |query| 
+      case params[:group_by]
+      when 'week'
+        query = query.select("*, count(*) as count, strftime('%W', date(startDate)) as week").
+          group(:week, :edition)
+      else
+        query
+      end
+    end
     @total = Hash[@all_editions.map {|edition, price| [edition, 0]}]
     @pivot = @licenses.reduce({}) do |m, row|
-      startDate = row['startDate']
+      startDate = row['week'] || row['startDate']
       record = m[startDate] || {}
       edition = row['edition']
-      record[edition] = 1 + (record[edition] || 0)
+      record[edition] = (row['count'] || 1) + (record[edition] || 0)
       m[startDate] = record
-      @total[edition] += 1
+      @total[edition] += row['count'] || 1
       m
     end
   end

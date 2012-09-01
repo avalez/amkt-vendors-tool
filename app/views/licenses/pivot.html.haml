@@ -4,6 +4,12 @@
 
 = render 'filter', :return_to => 'pivot_licenses_path'
 
+<b>Group By:</b>
+- if params[:group_by] == 'week'
+  = link_to  'WEEK', pivot_licenses_path(:group_by => nil)
+- else
+  = link_to  'week', pivot_licenses_path(:group_by => 'week')
+
 %table#licenses
   %thead
     %tr
@@ -20,3 +26,4 @@
         %td= startDate
         - @all_editions.each do |edition, price|
           %td= license[edition]
+
