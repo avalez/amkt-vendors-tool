@@ -1,5 +1,5 @@
 = form_tag filter_licenses_path, :method => :post do
-  = hidden_field_tag 'return_to', return_to
+  = hidden_field_tag 'return_to', @current_action
   Include:<br/>
   Editions: 
   - @all_editions.each do |edition, price|

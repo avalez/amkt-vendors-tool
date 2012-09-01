@@ -62,7 +62,7 @@ class LicensesController < ApplicationController
     session[:countries] = params[:countries]
     session[:fromDate] = params[:fromDate]
     session[:toDate] = params[:toDate]
-    redirect_to send params[:return_to],
+    redirect_to :action => params[:return_to],
       :editions => session[:editions], :countries => session[:countries],
       :fromDate => session[:fromDate], :toDate => session[:toDate],
       :sort => session[:sort]
