@@ -21,6 +21,7 @@ AmktClient::Application.routes.draw do
       post 'filter'
       get 'sort'
       get 'import'
+      post 'do_import'
     end
   end
 

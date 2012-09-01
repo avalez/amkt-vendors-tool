@@ -79,10 +79,11 @@ class License < ActiveRecord::Base
     [addOn, technicalContact, technicalContactAddress, billingContact, license]
   end
 
-  def self.import
-    csv_text = File.read('licenseReport.csv')
-    csv = CSV.parse(csv_text, :headers => true)
-    csv.map {|license| import_license license}
+  def self.import csv_licenses
+    csv = CSV.parse(csv_licenses, :headers => true)
+    licenses = csv.map {|license| import_license license}
+    #Rails.logger.info licenses
+    licenses.length
   end
 
   belongs_to :addOn

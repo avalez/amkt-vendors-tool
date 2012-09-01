@@ -1,5 +1,19 @@
+-# edit.html.haml
+
 = render 'nav'
 
 %h1 Import Licenses
+
+= form_tag do_import_licenses_path, :method => :post do
+
+  = label :vendor, :email, 'AMKT Vendor Email'
+  = text_field :vendor, 'email'
+
+  = label :vendor, :password, 'Password'
+  = password_field :vendor, 'password'
+
+  = submit_tag 'Import'
+
+%h2 Log
 
 =@log

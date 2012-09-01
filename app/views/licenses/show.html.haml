@@ -8,6 +8,11 @@
     = @license.technicalContact.name
     , 
     = @license.technicalContact.email
+  %li
+    Dates: 
+    = @license.startDate
+    -
+    = @license.endDate
 
 = link_to 'Edit', edit_license_path(@license)
 = link_to 'Back to licenses list', licenses_path

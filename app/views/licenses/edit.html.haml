@@ -2,7 +2,7 @@
 
 %h1 Edit Existing License @license.licenseId
 
-= form_tag license_path(@movie), :method => :put do
+= form_tag license_path(@license), :method => :put do
 
   = label :license, :ogranisationName, 'Organization Name'
   = text_field :license, 'organisationName'

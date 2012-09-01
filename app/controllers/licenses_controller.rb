@@ -1,3 +1,6 @@
+require "net/https"
+require "uri"
+
 class LicensesController < ApplicationController
   def defaults
     @fromDate = Date.new(2012,04,28)
@@ -182,7 +185,54 @@ class LicensesController < ApplicationController
   end
 
   def import
-    @log = License.import
+    @log = flash[:log]
+    @vendor = flash[:vendor]
+  end
+
+  def get_licenses username, password
+    uri = URI.parse("https://marketplace.atlassian.com/manage/vendors/120")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    request = Net::HTTP::Get.new(uri.request_uri)
+    response = http.request(request)
+    @log << response['location']
+    cookie = response['set-cookie'].split(';')[0]
+
+    uri = URI.parse(response['location'])
+    request = Net::HTTP::Post.new(uri.request_uri, {'Cookie' => cookie})
+    request.set_form_data({:redirect => '', :username => username, :password => password})
+    response = http.request(request)
+    @log << response['location']
+    if (/\/login\?/ =~ response['location'])
+      return nil
+    end
+
+    uri = URI.parse("https://marketplace.atlassian.com/manage/vendors/120/licenseReport")
+    request = Net::HTTP::Get.new(uri.request_uri, {'Cookie' => cookie})
+    response = http.request(request)
+    if (response.code == '200')
+      response.body
+    else
+      @log << response.code
+      @log << response.body
+    end
+  end
+
+  def do_import
+    @log = Array.new
+    @vendor = Hash.new
+    contact = Contact.new params[:vendor]
+    csv = get_licenses contact.email, contact.password
+    #csv = File.read('licenseReport.csv')
+    if (csv)
+      @log << License.import(csv)
+    else
+      flash[:warning] = "Login incorrect"
+    end
+    flash[:log] = @log
+    flash[:vendor] = contact
+    redirect_to import_licenses_path
   end
 
   def show
