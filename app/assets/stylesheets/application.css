@@ -33,22 +33,22 @@ h1.title {
   font-size: 2em;
   font-style: normal;
 }
-table#movies {
+table#licenses {
   margin: 10px;
   border-collapse: collapse;
   width: 100%;
   border-bottom: 2px solid black;
 }
-table#movies th {
+table#licenses th {
   border: 2px solid white;
   font-weight: bold;
   background-color: wheat;
 }
-table#movies th, table#movies td {
+table#licenses th, table#licenses td {
   padding: 4px;
   text-align: left;
 }
-table#movies th.hilite {
+table#licenses th.hilite {
   background-color: yellow;
 }
 #notice #warning {
