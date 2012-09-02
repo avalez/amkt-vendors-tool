@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate
     Rails.env != 'production' || authenticate_or_request_with_http_basic do |username, password|
-      username == ENV['amkt_client_username'] && password == ENV['amkt_client_password']
+      username == ENV['amkt_client_username'] && Pssword.check(password, ENV['amkt_client_password'])
     end
   end
 end
