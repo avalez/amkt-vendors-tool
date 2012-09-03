@@ -130,7 +130,12 @@ class LicensesController < ApplicationController
     end
     @total = Hash[@all_editions.map {|edition, price| [edition, 0]}]
     @pivot = @licenses.reduce({}) do |m, row|
-      startDate = row['week'] || row['startDate']
+      if session[:group_by]
+        date = Date.parse row['startDate']
+        startDate = Date.commercial date.year, date.cweek, 1
+      else
+        startDate = row['startDate']
+      end
       record = m[startDate] || {}
       edition = row['edition']
       record[edition] = (row['count'] || 1) + (record[edition] || 0)
