@@ -18,13 +18,13 @@ class LicensesController < ApplicationController
     if (session[:editions])
       filter['edition'] = session[:editions].keys
     end
-    if (session[:countries])
-      filter['technicalContactCountry'] = session[:countries].keys
-    end
     if (session[:fromDate] && session[:toDate])
       filter[:startDate] = @fromDate .. @toDate
     end
     @licenses = License.where(filter)
+    if (session[:countries])
+      @licenses = @licenses.joins(:technicalContactAddress).where('addresses.country' => session[:countries].keys)
+    end
     if (session[:sort])
       @licenses = @licenses.order(session[:sort])
     end
