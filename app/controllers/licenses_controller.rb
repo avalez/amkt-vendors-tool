@@ -46,12 +46,6 @@ class LicensesController < ApplicationController
   end
 
   def restful
-    update_session :editions
-    update_session :countries
-    update_session :fromDate
-    update_session :toDate
-    update_session :sort
-    update_session :group_by
     if (params[:editions] != session[:editions] ||
         params[:countries] != session[:countries] ||
         params[:fromDate] != session[:fromDate] ||
@@ -68,11 +62,29 @@ class LicensesController < ApplicationController
     end
   end
 
-  def filter
+  def restful_redirect
     redirect_to :action => params[:return_to],
-      :editions => params[:editions], :countries => params[:countries],
-      :fromDate => params[:fromDate], :toDate => params[:toDate],
-      :sort => session[:sort], :group_by => session[:group_by] # session!
+      :editions => session[:editions], :countries => session[:countries],
+      :fromDate => session[:fromDate], :toDate => session[:toDate],
+      :sort => session[:sort], :group_by => session[:group_by]
+  end
+
+  def filter
+    session[:editions] = params[:editions]
+    session[:countries] = params[:countries]
+    session[:fromDate] = params[:fromDate]
+    session[:toDate] = params[:toDate]
+    restful_redirect
+  end
+
+  def sort
+    session[:sort] = params[:sort]
+    restful_redirect
+  end
+
+  def group
+    session[:group_by] = params[:group_by]
+    restful_redirect
   end
 
   def index

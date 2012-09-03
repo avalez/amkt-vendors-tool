@@ -1,0 +1,5 @@
+<b>Group By:</b>
+- if session[:group_by] == 'week'
+  = link_to  'WEEK', group_licenses_path(:return_to => @current_action)
+- else
+  = link_to  'week', group_licenses_path(:group_by => 'week', :return_to => @current_action)
