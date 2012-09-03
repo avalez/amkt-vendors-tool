@@ -133,7 +133,9 @@ class LicensesController < ApplicationController
   end
 
   def pivot_licenses
-    licenses do |query| 
+    licenses
+=begin
+    do |query| 
       case session[:group_by]
       when 'week'
         if (Rails.env.production?)
@@ -144,16 +146,17 @@ class LicensesController < ApplicationController
           week = 'strftime("%W", date(startDate))'
           year = 'strftime("%Y", date(startDate))'
         end
-        query = query.select("edition, count(*) count, #{week} \"week\", #{year} \"year\"").
-          group(:week, :edition)
+        query = query.select("edition, count(*) count, #{week} \"week\", #{year} \"year\"").group(:year, :week, :edition)
       else
         query
       end
     end
+=end
     @total = Hash[@all_editions.map {|edition, price| [edition, 0]}]
     @pivot = @licenses.reduce({}) do |m, row|
       if session[:group_by]
-        startDate = Date.commercial row['year'].to_i, row['week'].to_i, 1
+        date = Date.parse row['startDate']
+        startDate = Date.commercial date.year, date.cweek, 1
       else
         startDate = row['startDate']
       end
