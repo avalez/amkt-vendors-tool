@@ -39,43 +39,42 @@ class LicensesController < ApplicationController
     Date.civil(param[:year].to_i, param[:month].to_i, param[:day].to_i)
   end
 
+  def update_session param
+    if (params[param]) 
+      session[param] = params[param]
+    end
+  end
+
   def restful
+    update_session :editions
+    update_session :countries
+    update_session :fromDate
+    update_session :toDate
+    update_session :sort
+    update_session :group_by
     if (params[:editions] != session[:editions] ||
         params[:countries] != session[:countries] ||
         params[:fromDate] != session[:fromDate] ||
-        params[:toDate] != session[:toDate])
+        params[:toDate] != session[:toDate] ||
+        params[:sort] != session[:sort] ||
+        params[:group_by] != session[:group_by])
       redirect_to :action => action_name,
         :editions => session[:editions], :countries => session[:countries],
-        :fromDate => session[:fromDate], :toDate => session[:toDate]
+        :fromDate => session[:fromDate], :toDate => session[:toDate],
+        :sort => session[:sort], :group_by => session[:group_by]
       return false
     else
-      session[:editions] = params[:editions] || session[:editions]
-      session[:countries] = params[:countries] || session[:countries]
-      session[:fromDate] = params[:fromDate] || session[:fromDate]
-      session[:toDate] = params[:toDate] || session[:toDate]
       return true
     end
   end
 
   def filter
-    session[:editions] = params[:editions]
-    session[:countries] = params[:countries]
-    session[:fromDate] = params[:fromDate]
-    session[:toDate] = params[:toDate]
     redirect_to :action => params[:return_to],
-      :editions => session[:editions], :countries => session[:countries],
-      :fromDate => session[:fromDate], :toDate => session[:toDate],
-      :sort => session[:sort]
+      :editions => params[:editions], :countries => params[:countries],
+      :fromDate => params[:fromDate], :toDate => params[:toDate],
+      :sort => session[:sort], :group_by => session[:group_by] # session!
   end
 
-  def sort
-    session[:sort] = params[:sort]
-    redirect_to :action => params[:return_to],
-      :editions => session[:editions], :countries => session[:countries],
-      :fromDate => session[:fromDate], :toDate => session[:toDate],
-      :sort => session[:sort]
-  end
-  
   def index
     restful or return false
     licenses
@@ -121,7 +120,7 @@ class LicensesController < ApplicationController
 
   def pivot_licenses
     licenses do |query| 
-      case params[:group_by]
+      case session[:group_by]
       when 'week'
         query = query.select("*, count(*) as count, strftime('%W', date(startDate)) as week").
           group(:week, :edition)

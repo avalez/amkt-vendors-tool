@@ -5,8 +5,8 @@
 = render 'filter'
 
 <b>Group By:</b>
-- if params[:group_by] == 'week'
-  = link_to  'WEEK', pivot_licenses_path(:group_by => nil)
+- if session[:group_by] == 'week'
+  = link_to  'WEEK', pivot_licenses_path(:group_by => 'none')
 - else
   = link_to  'week', pivot_licenses_path(:group_by => 'week')
 

@@ -19,7 +19,6 @@ AmktClient::Application.routes.draw do
       get 'timeline'
       get 'geochart'
       post 'filter'
-      get 'sort'
       get 'import'
       post 'do_import'
     end
