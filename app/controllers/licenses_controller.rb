@@ -134,7 +134,7 @@ class LicensesController < ApplicationController
     licenses do |query| 
       case session[:group_by]
       when 'week'
-        query = query.select("*, count(*) as count, strftime('%W', date(licenses.startDate)) as week").
+        query = query.select('*, count(*) as count, strftime("%W", date("licenses"."startDate")) as week').
           group(:week, :edition)
       else
         query
