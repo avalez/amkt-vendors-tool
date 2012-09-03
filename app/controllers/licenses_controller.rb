@@ -138,7 +138,7 @@ class LicensesController < ApplicationController
       when 'week'
         if (Rails.env.production?)
           # http://stackoverflow.com/questions/7171561/strftime-in-sqlite-convert-to-postgres
-          week = 'extract(dow from date("licenses"."startDate"))'
+          week = 'extract(week from date("licenses"."startDate"))'
           year = 'extract(year from date("licenses"."startDate"))'
         else
           week = 'strftime("%W", date(startDate))'
