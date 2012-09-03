@@ -144,7 +144,7 @@ class LicensesController < ApplicationController
           week = 'strftime("%W", date(startDate))'
           year = 'strftime("%Y", date(startDate))'
         end
-        query = query.select("edition, count(*) count, #{week} week, #{year} year").
+        query = query.select("edition, count(*) count, #{week} week, #{year} \"year\"").
           group(:week, :edition)
       else
         query
