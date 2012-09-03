@@ -10,6 +10,7 @@ class LicensesController < ApplicationController
       @toDate = date session[:toDate]
     end
     @all_editions = License.all_editions
+    @current_action = action_name
   end
   def licenses
     defaults
@@ -32,7 +33,6 @@ class LicensesController < ApplicationController
       @licenses = yield @licenses
     end
     @licenses.map {|license| license['price'] = License.price license}
-    @current_action = action_name
   end
 
   def date param
