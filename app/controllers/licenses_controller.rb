@@ -32,7 +32,9 @@ class LicensesController < ApplicationController
     if block_given?
       @licenses = yield @licenses
     end
-    @licenses.map {|license| license['price'] = License.price license}
+    if !session[:group_by]
+      @licenses.map {|license| license['price'] = License.price license}
+    end
   end
 
   def date param
@@ -135,11 +137,14 @@ class LicensesController < ApplicationController
       case session[:group_by]
       when 'week'
         if (Rails.env.production?)
+          # http://stackoverflow.com/questions/7171561/strftime-in-sqlite-convert-to-postgres
           week = 'extract(dow from date("licenses"."startDate"))'
+          year = 'extract(year from date("licenses"."startDate"))'
         else
           week = 'strftime("%W", date(startDate))'
+          year = 'strftime("%Y", date(startDate))'
         end
-        query = query.select("*, count(*) as count, #{week} as week").
+        query = query.select("edition, count(*) count, #{week} week, #{year} year").
           group(:week, :edition)
       else
         query
@@ -148,8 +153,7 @@ class LicensesController < ApplicationController
     @total = Hash[@all_editions.map {|edition, price| [edition, 0]}]
     @pivot = @licenses.reduce({}) do |m, row|
       if session[:group_by]
-        date = Date.parse row['startDate']
-        startDate = Date.commercial date.year, date.cweek, 1
+        startDate = Date.commercial row['year'].to_i, row['week'].to_i, 1
       else
         startDate = row['startDate']
       end
