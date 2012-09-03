@@ -1,41 +1,65 @@
 == AMKT Vendors' Tool
 
-This is simple web-application to help analyze data provided by Atlassian Marketplace.
-It is only useful for vendors of add-ons to Atlassian products paid with Atlassian.
-However it may be also interesting as example of using Ruby on Rails to quickly
-implement small business tool.
+This is simple web-application to help analyze data provided by Atlassian
+Marketplace. It is only useful for vendors of add-ons to Atlassian products
+paid via Atlassian. However it may be also interesting as example of using Ruby
+on Rails to quickly implement small business tool.
 
-At current stage it reads licenseReport.csv from application home and allows to see
-licenses filtered by editions, countries and date range. Also it provides timeline and
-geographical visualizations using Google Charts.
+It reads licenseReport.csv from Atlassian Marketplace vendor page and lets
+analyze licenses filtered by editions, countries and date range. Also it
+provides timeline and geographical visualizations using Google Charts.
 
 With this tool it is possible to:
 
-1. Determine potential customers, those who've got Evaluation license, but did not
- buy commercial license after it. 
+1. Determine potential customers, those who've got Evaluation license, but did
+not buy commercial license after trial period (month). 
 
 2. See sales trend.
 
 3. Verify earnings for period.
 
-To use it 
+IMPORTANT, to let it be useful code must be altered! I.e.
+
+1) Edit licenses-controller.rb#get_licenses and adjust URL for your vendor's id,
+e.g.:
+
+  https://marketplace.atlassian.com/manage/vendors/<VENDOR_ID>/licenseReport"
+
+2) Edit License.rb and specify your prices for your add-on.
+
+Try it locally:
 
   $ git clone https://github.com/avalez/amkt-vendors-tool
   $ cd amkt-vedors-tool
   $ bundle install --without production
   $ rails server
 
-Then go to http://localhost:3000/licenses
+Then go to http://localhost:3000/licenses to see it working and to
+licesses/import to get licenses from AMKT.
 
-IMPORTANT, You'll need to put licenseReport.csv into 'amkt-vendors-tool' dir and
-to really use it, edit License.rb and specify your prices for your add-on.
+And run it on Heroku:
 
-This software can be used without any warranties or restrictions of use and redistribution.
+  $ heroku create myaddon-analytics
+  $ ruby genpwd.rd
+  $ heroku config:add ...
+  $ heroku push remote master
+
+Then go to http://your-addon.herokuapp.com/licenses
+
+NOTE, it is restricted with basic authentication using username and password of
+your choice, stored hashed as Heroku configuraiton variables.
+
+KNOWN PROBLEM: timeout with licenses/import, but it works, see
+https://devcenter.heroku.com/articles/request-timeout
+
+This software can be used without any warranties or restrictions of use and
+redistribution.
 
 Bellow follows a little bit adjusted standard Ruby on Rails readme.
 
-This application is written using Rails web-application framework that includes everything
-needed to create database-backed web applications according to the Model-View-Control pattern.
+This application is written using Rails web-application framework that includes
+everything needed to create database-backed web applications according to the
+Model-View-Control pattern.
 
 This pattern splits the view (also called the presentation) into "dumb"
 templates that are primarily responsible for inserting pre-built data in between
