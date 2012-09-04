@@ -33,7 +33,9 @@
         %td= license.endDate
         %td= license['price']
 
--#- @licenses.each do |license|
--#  #{license['technicalContactName']} &lt;#{license['technicalContactEmail']}&gt;,<br/>
+- if (@current_action == 'notbought')
+  - @licenses.each do |license|
+    #{license.technicalContact.name} &lt;#{license.technicalContact.email}&gt;,
+
 
 
