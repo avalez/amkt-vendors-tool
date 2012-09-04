@@ -23,7 +23,7 @@ class LicensesController < ApplicationController
     end
     @licenses = License.where(filter)
     if (session[:countries])
-      @licenses = @licenses.joins(:technicalContactAddress).where('addresses.country' => session[:countries].keys)
+      #@licenses = @licenses.joins(:technicalContactAddress).where('addresses.country' => session[:countries].keys)
     end
     if (session[:sort])
       @licenses = @licenses.order(session[:sort])
