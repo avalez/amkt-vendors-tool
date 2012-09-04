@@ -26,7 +26,8 @@ class LicensesController < ApplicationController
       @licenses = @licenses.joins(:technicalContactAddress).where('addresses.country' => session[:countries].keys)
     end
     if (session[:sort])
-      @licenses = @licenses.order(session[:sort].to_sym)
+      # otherwise column does not exist in postresql
+      @licenses = @licenses.order('"licenses".'+"\"#{session[:sort]}\"")
     end
     @licenses = @licenses.includes([:technicalContact, :technicalContactAddress])
     if block_given?
