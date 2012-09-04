@@ -48,6 +48,12 @@ class LicensesController < ApplicationController
   end
 
   def restful
+    update_session :editions
+    update_session :countries
+    update_session :fromDate
+    update_session :toDate
+    update_session :sort
+    update_session :group_by
     if (params[:editions] != session[:editions] ||
         params[:countries] != session[:countries] ||
         params[:fromDate] != session[:fromDate] ||
