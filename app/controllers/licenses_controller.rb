@@ -104,11 +104,43 @@ class LicensesController < ApplicationController
     render :action => 'index'
   end
 
+  class OrganisationNameOrTechnicalEmailKey
+    attr_reader :organisationName
+    attr_reader :technicalEmail
+
+    def initialize organisationName, technicalEmail, hashArray
+      @organisationName = organisationName
+      @technicalEmail = technicalEmail
+      @hashArray = hashArray
+    end
+
+    def == other
+       self.organisationName == other.organisationName ||
+         self.technicalEmail == other.technicalEmail
+    end
+    
+    def eql? other
+      return self == other
+    end
+    
+    def hash
+      i = @hashArray.index self 
+      if !i
+        i = @hashArray.size
+        @hashArray[i] = self
+      end
+      return i
+    end
+  end
+
   def notbought
     index or return
+    hashArray = Array.new
     @licenses_map = @licenses.reduce({}) do |m, license|
-      organisationName = license['organisationName'] || 'N/A'
-      licenses = m[organisationName] || []
+      organisationName = license.organisationName || 'N/A'
+      technicalEmail = license.technicalContact.email || 'N/A'
+      key = OrganisationNameOrTechnicalEmailKey.new organisationName, technicalEmail, hashArray
+      licenses = m[key] || []
       i = licenses.index {|l| l['edition'] == license['edition']}
       if (!i)
         license['count'] = 1
@@ -119,7 +151,7 @@ class LicensesController < ApplicationController
       else
         licenses[i]['count'] += 1
       end
-      m[organisationName] = licenses
+      m[key] = licenses
       m
     end
     @licenses_map = @licenses_map.select do |organisationName, licenses|
