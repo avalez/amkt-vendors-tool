@@ -61,7 +61,7 @@ class License < ActiveRecord::Base
     addOn = AddOn.find_or_create_by_key row['addOnKey'], :name => row['addOnName']
     technicalContact = Contact.find_or_create_by_email row['technicalContactEmail'],
       :name => row['technicalContactName'], :phone => row['technicalContactPhone']
-    technicalContactAddress = Address.find_or_create_by_address1_and_postcode row['technicalContactAddress1'],
+    technicalContactAddress = Address.find_or_create_by_address1_and_postcode_and_country row['technicalContactAddress1'],
       :address2 => row['technicalContactAddress2'], :city => row['technicalContactCity'],
       :state => row['technicalContactState'], :postcode => row['technicalContactPostcode'],
       :country => row['technicalContactCountry']
