@@ -5,6 +5,9 @@ class License < ActiveRecord::Base
     {'Evaluation' => 0, '10 Users' => 10, '25 Users' => 10, '50 Users' => 50, '100 Users' => 50,
      '500 Users' => 100, 'Enterprise 500 Users' => 100, 'Enterprise 2000 Users' => 100, 'Enterprise 10000+ Users' => 100, 'Unlimited Users' => 100}
 
+  @@supported_countries = %w{AU US CA AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE UK}.
+    inject({}) {|h, c| h[c] = true; h}
+
   @@commercial_renewal = @@commercial_purchase.reduce({}) { |m, (edition, price)| m[edition] = (price.to_f / 2).ceil; m }
 
   @@academic_purchase = @@commercial_renewal.update Hash['10 Users' => 10]
@@ -21,6 +24,10 @@ class License < ActiveRecord::Base
 
   def self.paid_licenseTypes
     @@paid_licenseTypes
+  end
+
+  def self.supported_countries
+    @@supported_countries
   end
 
   def self.price license

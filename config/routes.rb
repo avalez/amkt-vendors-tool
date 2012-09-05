@@ -18,6 +18,7 @@ AmktClient::Application.routes.draw do
       get 'pivot'
       get 'timeline'
       get 'geochart'
+      get 'filter'
       post 'filter'
       get 'sort'
       get 'group'

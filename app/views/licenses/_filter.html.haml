@@ -12,7 +12,11 @@
   = select_date @toDate, :prefix => 'toDate'
   <br/>
   - if (defined? countries)
-    Countries: 
+    Countries (#{link_to 'All', filter_licenses_path(:edition => session[:editions], |
+    :fromDate => session[:fromDate], :toDate => session[:toDate], |
+    :return_to => @current_action)}/#{link_to 'Supported', filter_licenses_path( :edition => session[:editions], |
+    :fromDate => session[:fromDate], :toDate => session[:toDate], :countries => License.supported_countries, |
+    :return_to => @current_action)}): |
     - @geo.each do |country, num_of_licenses|
       = check_box_tag "countries[#{country}]", 1, session[:countries] && session[:countries].key?(country)
       #{country}&nbsp;(#{num_of_licenses})
