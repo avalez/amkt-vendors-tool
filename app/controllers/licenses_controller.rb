@@ -22,6 +22,9 @@ class LicensesController < ApplicationController
       filter[:startDate] = @fromDate .. @toDate
     end
     @licenses = License.where(filter)
+    if (session[:countries])
+      @licenses = @licenses.joins(:technicalContactAddress).where('addresses.country' => session[:countries].keys)
+    end
     if (session[:sort])
       # otherwise column does not exist in postresql
       @licenses = @licenses.order('"licenses".'+"\"#{session[:sort]}\"")
@@ -32,11 +35,6 @@ class LicensesController < ApplicationController
     end
     if !session[:group_by]
       @licenses.map {|license| license['price'] = License.price license}
-    end
-    # without activerecord, otherwise does not work on postresql on heroku:
-    #  .joins(:technicalContactAddress).where('addresses.country' => session[:countries].keys)
-    if (session[:countries])
-      @licenses = @licenses.find_all {|l| session[:countries].keys.index l.technicalContactAddress.country}
     end
   end
 
