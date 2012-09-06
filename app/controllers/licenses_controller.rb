@@ -33,9 +33,7 @@ class LicensesController < ApplicationController
     if block_given?
       @licenses = yield @licenses
     end
-    if !session[:group_by]
-      @licenses.map {|license| license['price'] = License.price license}
-    end
+    @licenses.map {|license| license['price'] = License.price license}
   end
 
   def date param
