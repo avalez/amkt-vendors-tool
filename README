@@ -57,8 +57,6 @@ see license.rb for bottle neck, and to try, run:
 
   $ unicorn_rails --config-file unicorn.config.ru
 
-See also https://github.com/rails/rails/blob/master/actionpack/lib/action_controller/metal/streaming.rb
-
 NOTICE, this software can be used without any warranties or restrictions of use and
 redistribution.
 

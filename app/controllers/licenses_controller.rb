@@ -260,15 +260,17 @@ class LicensesController < ApplicationController
     @log = flash[:log] || Array.new
     flash.delete :log
     amkt_cookie = flash[:amkt_cookie]
-    if true
-      #csv = get_licenses amkt_cookie
-      csv = File.read('licenseReport-20120820.csv')
+    if flash[:amkt_cookie]
+      csv = get_licenses amkt_cookie
+      #csv = File.read('licenseReport.csv')
       if (csv)
-        @log = License.import csv #Enumerator.new {|y| License.import(csv) {|row| y << row}}
+        # new Enumerator
+        @log = License.import csv
       end
     else
       @log << 'no cookie'
     end
+    # see https://github.com/rails/rails/blob/master/actionpack/lib/action_controller/metal/streaming.rb
     render :stream => true
   end
 
