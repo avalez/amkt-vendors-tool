@@ -65,6 +65,10 @@ class License < ActiveRecord::Base
   end
 
   def self.import_license row
+    license = License.find_by_licenseId row['licenseId']
+    if license
+      return #[license]
+    end
     addOn = AddOn.find_or_create_by_key row['addOnKey'], :name => row['addOnName']
     technicalContact = Contact.find_or_create_by_email row['technicalContactEmail'],
       :name => row['technicalContactName'], :phone => row['technicalContactPhone']
@@ -91,7 +95,9 @@ class License < ActiveRecord::Base
     Enumerator.new do |y|
       CSV.parse(csv_licenses, :headers => true) do |row|
         license = import_license row
-        y << license
+        if license
+          y << license
+        end
       end
     end
     #Rails.logger.info licenses
