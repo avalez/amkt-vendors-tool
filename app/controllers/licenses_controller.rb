@@ -267,8 +267,6 @@ class LicensesController < ApplicationController
         # new Enumerator
         @log = License.import csv
       end
-    else
-      @log << 'no cookie'
     end
     # see https://github.com/rails/rails/blob/master/actionpack/lib/action_controller/metal/streaming.rb
     render :stream => true
