@@ -1,4 +1,7 @@
 -# edit.html.haml
+- if flash[:amkt_cookie]
+  - content_for(:onload) do
+    $('#log').load("#{import_stream_licenses_path(:amkt_cookie => flash[:amkt_cookie])}")
 
 = render 'nav'
 

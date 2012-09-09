@@ -258,18 +258,35 @@ class LicensesController < ApplicationController
   def import
     @vendor = flash[:vendor]
     @log = flash[:log] || Array.new
-    flash.delete :log
-    amkt_cookie = flash[:amkt_cookie]
+    if env['SERVER_SOFTWARE'] !~ /Unicorn/
+      import_func flash[:amkt_cookie] {|log| @log = log}
+      flash.delete :amkt_cookie
+    end
+    # see https://github.com/rails/rails/blob/master/actionpack/lib/action_cont
+    # not possible with haml
+    #render :stream => true
+  end
+
+  def import_func amkt_cookie
     if amkt_cookie
       csv = get_licenses amkt_cookie
       #csv = File.read('licenseReport.csv')
       if (csv)
-        # new Enumerator
-        @log = License.import csv
+        yield License.import(csv)
       end
     end
-    # see https://github.com/rails/rails/blob/master/actionpack/lib/action_controller/metal/streaming.rb
-    render :stream => true
+  end
+
+  def import_stream
+    amkt_cookie = params[:amkt_cookie]
+    self.response.headers['Last-Modified'] = Time.now.to_s
+    self.response_body = Enumerator.new do |y|
+      import_func amkt_cookie do |log|
+        log.each do |license|
+          y << '<li>' + license.to_s.gsub(/</, '&lt;').gsub(/>/,'&gt;') + '</li>'
+        end
+      end
+    end
   end
 
   def amkt_http uri

@@ -7,7 +7,7 @@
     = csrf_meta_tags
     = yield(:head)
 
-  %body
+  %body{:onload => yield(:onload)}
     %h1.title Atlassian Marketplace Vendors Tool
     #main
       - if flash[:notice]

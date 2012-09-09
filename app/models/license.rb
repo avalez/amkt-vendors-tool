@@ -92,11 +92,11 @@ class License < ActiveRecord::Base
 
   def self.import csv_licenses
     # TODO http://ruby-doc.org/core-1.9.3/Object.html#method-i-enum_for
-    Enumerator.new do |y|
+    Enumerator.new do |yielder|
       CSV.parse(csv_licenses, :headers => true) do |row|
         license = import_license row
         if license
-          y << license
+          yielder.yield license
         end
       end
     end
