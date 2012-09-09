@@ -260,7 +260,7 @@ class LicensesController < ApplicationController
     @log = flash[:log] || Array.new
     flash.delete :log
     amkt_cookie = flash[:amkt_cookie]
-    if flash[:amkt_cookie]
+    if amkt_cookie
       csv = get_licenses amkt_cookie
       #csv = File.read('licenseReport.csv')
       if (csv)
@@ -284,7 +284,7 @@ class LicensesController < ApplicationController
     request = Net::HTTP::Post.new(uri.request_uri)
     request.set_form_data({:redirect => '', :username => username, :password => password})
     response = amkt_http(uri).request(request)
-    auth = (/\/login\?/ !~ response['location'])
+    auth = (/\/login\W/ !~ response['location'])
     if auth && block_given?
       yield response['set-cookie'].split(';')[0]
     end
@@ -298,8 +298,8 @@ class LicensesController < ApplicationController
     if (response.code == '200')
       response.body.force_encoding("UTF-8")
     else
-      @log << response.code
-      @log << response.body
+      @log << [response.code, response.body]
+      false
     end
   end
 
