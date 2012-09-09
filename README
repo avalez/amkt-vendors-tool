@@ -53,7 +53,8 @@ KNOWN PROBLEM: timeout with licenses/import, but it works, see
 https://devcenter.heroku.com/articles/request-timeout
 
 Attempted to fix with http://asciicasts.com/episodes/266-http-streaming unsuccessfully,
-see http://stackoverflow.com/questions/7504492/rails-http-streaming-with-haml
+see http://stackoverflow.com/questions/7504492/rails-http-streaming-with-haml, so using
+ajax for plain response. See also hints for unicorn on heroku: http://michaelvanrooijen.com/articles/2011/06/01-more-concurrency-on-a-single-heroku-dyno-with-the-new-celadon-cedar-stack/
 
 NOTICE, this software can be used without any warranties or restrictions of use and
 redistribution.

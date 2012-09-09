@@ -24,6 +24,7 @@ AmktClient::Application.routes.draw do
       get 'group'
       get 'import'
       post 'do_import'
+      get  'import_stream'
     end
   end
 
