@@ -87,10 +87,15 @@ class License < ActiveRecord::Base
   end
 
   def self.import csv_licenses
-    csv = CSV.parse(csv_licenses, :headers => true)
-    licenses = csv.map {|license| import_license license}
+    # TODO http://ruby-doc.org/core-1.9.3/Object.html#method-i-enum_for
+    Enumerator.new do |y|
+      CSV.parse(csv_licenses, :headers => true) do |row|
+        license = import_license row
+        y << license
+      end
+    end
     #Rails.logger.info licenses
-    licenses.length
+    #licenses.length
   end
 
   belongs_to :addOn

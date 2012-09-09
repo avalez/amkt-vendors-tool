@@ -16,4 +16,6 @@
 
 %h2 Log
 
-=@log
+%ul#log
+  - @log.each do |row|
+    %li= row

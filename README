@@ -52,7 +52,14 @@ your choice, stored hashed as Heroku configuraiton variables.
 KNOWN PROBLEM: timeout with licenses/import, but it works, see
 https://devcenter.heroku.com/articles/request-timeout
 
-This software can be used without any warranties or restrictions of use and
+Attempted to fix with http://asciicasts.com/episodes/266-http-streaming unsuccessfully,
+see license.rb for bottle neck, and to try, run:
+
+  $ unicorn_rails --config-file unicorn.config.ru
+
+See also https://github.com/rails/rails/blob/master/actionpack/lib/action_controller/metal/streaming.rb
+
+NOTICE, this software can be used without any warranties or restrictions of use and
 redistribution.
 
 Bellow follows a little bit adjusted standard Ruby on Rails readme.

@@ -256,26 +256,45 @@ class LicensesController < ApplicationController
   end
 
   def import
-    @log = flash[:log]
     @vendor = flash[:vendor]
+    @log = flash[:log] || Array.new
+    flash.delete :log
+    amkt_cookie = flash[:amkt_cookie]
+    if true
+      #csv = get_licenses amkt_cookie
+      csv = File.read('licenseReport-20120820.csv')
+      if (csv)
+        @log = License.import csv #Enumerator.new {|y| License.import(csv) {|row| y << row}}
+      end
+    else
+      @log << 'no cookie'
+    end
+    render :stream => true
   end
 
-  def get_licenses username, password
-    uri = URI.parse("https://marketplace.atlassian.com/login")
+  def amkt_http uri
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http
+  end
+
+  def amkt_authenticate username, password
+    uri = URI.parse("https://marketplace.atlassian.com/login")
     request = Net::HTTP::Post.new(uri.request_uri)
     request.set_form_data({:redirect => '', :username => username, :password => password})
-    response = http.request(request)
-    if (/\/login\?/ =~ response['location'])
-      return nil
+    response = amkt_http(uri).request(request)
+    auth = (/\/login\?/ !~ response['location'])
+    if auth && block_given?
+      yield response['set-cookie'].split(';')[0]
     end
-
-    cookie = response['set-cookie'].split(';')[0]
+    auth
+  end
+  
+  def get_licenses cookie
     uri = URI.parse("https://marketplace.atlassian.com/manage/vendors/120/licenseReport")
     request = Net::HTTP::Get.new(uri.request_uri, {'Cookie' => cookie})
-    response = http.request(request)
+    response = amkt_http(uri).request(request)
     if (response.code == '200')
       response.body.force_encoding("UTF-8")
     else
@@ -286,17 +305,12 @@ class LicensesController < ApplicationController
 
   def do_import
     @log = Array.new
-    @vendor = Hash.new
     contact = Contact.new params[:vendor]
-    csv = get_licenses contact.email, contact.password
-    #csv = File.read('licenseReport.csv')
-    if (csv)
-      @log << License.import(csv)
-    else
+    if !amkt_authenticate(contact.email, contact.password) {|cookie| flash[:amkt_cookie] = cookie}
       flash[:warning] = "Login incorrect"
     end
-    flash[:log] = @log
     flash[:vendor] = contact
+    flash[:log] = @log
     redirect_to import_licenses_path
   end
 
