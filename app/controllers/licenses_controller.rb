@@ -163,7 +163,7 @@ class LicensesController < ApplicationController
       licenses.index {|license| license['edition'] != 'Evaluation'} == nil
     end
     @licenses = @licenses_map.values.flatten 1
-    @licenses = @licenses.find_all {|license| license['endDate'] <= '2012-08-31' && license['endDate'] >= '2012-08-01'}
+    @licenses = @licenses.find_all {|license| license['endDate'] <= '2012-09-31' && license['endDate'] >= '2012-09-01'}
     @licenses = @licenses.sort_by {|license| license['organisationName']} 
     @sum = 0
     render :action => 'index'
