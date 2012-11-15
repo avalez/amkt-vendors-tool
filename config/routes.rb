@@ -25,6 +25,9 @@ AmktClient::Application.routes.draw do
       get 'import'
       post 'do_import'
       get  'import_stream'
+      get 'sales'
+      post 'sales_update'
+      get  'sales_stream'
     end
   end
 

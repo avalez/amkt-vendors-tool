@@ -290,9 +290,9 @@ class LicensesController < ApplicationController
   end
 
   def amkt_http uri
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    proxy = URI.parse(ENV['https_proxy'])
+    http = Net::HTTP::Proxy(proxy.host, proxy.port).start(uri.host, uri.port,
+      :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_NONE)
     http
   end
 
@@ -320,15 +320,28 @@ class LicensesController < ApplicationController
     end
   end
 
-  def do_import
-    @log = Array.new
+  def authentication store
     contact = Contact.new params[:vendor]
-    if !amkt_authenticate(contact.email, contact.password) {|cookie| flash[:amkt_cookie] = cookie}
+    if !amkt_authenticate(contact.email, contact.password) {|cookie| store[:amkt_cookie] = cookie}
       flash[:warning] = "Login incorrect"
     end
-    flash[:vendor] = contact
+    contact
+  end
+
+  def do_import
+    @log = Array.new
+    flash[:vendor] = authentication(flash)
     flash[:log] = @log
     redirect_to import_licenses_path
+  end
+
+  def sales
+    @vendor = session[:vendor]
+  end
+
+  def sales_update
+    session[:vendor] = authentication(session)
+    redirect_to sales_licenses_path
   end
 
   def show
