@@ -29,7 +29,7 @@
 
 %br
 
-= select("album[]", "default", %w[0 3 5 8 -1], {}, { :index => nil })
+= select("album[]", "default", %w[0 3 5 8 -1], {}, { :index => nil, :onChange => "setOption('pageSize', parseInt(this.value, 10))"})
 
 %br
 
