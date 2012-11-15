@@ -352,6 +352,23 @@ class LicensesController < ApplicationController
     redirect_to sales_licenses_path
   end
 
+  def sales_data
+    respond_to do |format|
+      format.json do
+        uri = URI.parse('https://marketplace.atlassian.com/rest/1.0/vendors/120/sales' +
+          "?limit=#{params[:limit]}&offset=#{params[:offset]}")
+        request = Net::HTTP::Get.new(uri.request_uri, {'Cookie' => session[:amkt_cookie]})
+        response = amkt_http(uri).request(request)
+        if (response.code == '200')
+          render :json => response.body
+        else
+          render :json => {:error => response.body}
+        end
+      end
+    end
+    
+  end
+
   def show
     @license = License.find params[:id]
   end

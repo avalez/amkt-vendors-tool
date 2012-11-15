@@ -38,7 +38,6 @@ var TableQueryWrapper = function(query, container, options) {
   this.table = new google.visualization.Table(container);
   this.query = query;
   this.sortQueryClause = '';
-  this.pageQueryClause = '';
   this.container = container;
   this.currentDataTable = null;
 
@@ -69,12 +68,9 @@ var TableQueryWrapper = function(query, container, options) {
  * be redrawn upon each refresh.
  */
 TableQueryWrapper.prototype.sendAndDraw = function() {
-  this.query.abort();
-  var queryClause = this.sortQueryClause + ' ' + this.pageQueryClause;
-  this.query.setQuery(queryClause);
   this.table.setSelection([]);
   var self = this;
-  this.query.send(function(response) {self.handleResponse(response)});
+  this.query.send(this.limit, this.offset, function(response) {self.handleResponse(response)});
 };
 
 
@@ -139,7 +135,8 @@ TableQueryWrapper.prototype.setPageQueryClause = function(pageIndex) {
   this.currentPageIndex = pageIndex;
   var newStartRow = this.currentPageIndex * pageSize;
   // Get the pageSize + 1 so that we can know when the last page is reached.
-  this.pageQueryClause = 'limit ' + (pageSize + 1) + ' offset ' + newStartRow;
+  this.limit = pageSize + 1
+  this.offset = newStartRow;
   // Note: row numbers are 1-based yet dataTable rows are 0-based.
   this.tableOptions['firstRowNumber'] = newStartRow + 1;
   return true;
