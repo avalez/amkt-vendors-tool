@@ -7,7 +7,7 @@ class License < ActiveRecord::Base
      'Enterprise 2000 Users' => 300, 'Enterprise 10000 Users' => 300,
      'Enterprise 10000+ Users' => 300, 'Unlimited Users' => 200}
 
-  @@supported_countries = %w{AU US CA AT BE BG CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI ES SE UK}.
+  @@supported_countries = %w{AU US CA AT BE BG BR CY CZ DK EE FI FR DE GR HU HK IE IT LV LT LU MT NL NZ PL PT RO SK SI ES KR SE UK}.
     inject({}) {|h, c| h[c] = true; h}
 
   @@commercial_renewal = @@commercial_purchase.reduce({}) { |m, (edition, price)| m[edition] = (price.to_f / 2).ceil; m }
