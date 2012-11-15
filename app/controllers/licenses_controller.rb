@@ -290,8 +290,15 @@ class LicensesController < ApplicationController
   end
 
   def amkt_http uri
-    proxy = URI.parse(ENV['https_proxy'])
-    http = Net::HTTP::Proxy(proxy.host, proxy.port).start(uri.host, uri.port,
+    proxy_addr = nil
+    proxy_port = nil
+    proxy_url = ENV['https_proxy']
+    if (proxy_url)
+      proxy = URI.parse(proxy_url)
+      proxy_addr = proxy.host
+      proxy_port = proxy.port
+    end
+    http = Net::HTTP::Proxy(proxy_addr, proxy_port).start(uri.host, uri.port,
       :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_NONE)
     http
   end
