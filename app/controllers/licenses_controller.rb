@@ -336,6 +336,7 @@ class LicensesController < ApplicationController
   end
 
   def sales
+    @album = {:genre => :rap}
     @vendor = session[:vendor]
   end
 

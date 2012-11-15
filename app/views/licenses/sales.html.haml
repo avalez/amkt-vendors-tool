@@ -1,8 +1,9 @@
 -# sales.html.haml
 - if session[:amkt_cookie]
   - content_for(:head) do
-    - javascript_include_tag 'http://www.google.com/jsapi'
-    -# javascript_include_tag :timeline
+    = javascript_include_tag 'http://www.google.com/jsapi'
+    = javascript_include_tag :tablequerywrapper
+    = javascript_include_tag :sales
   - content_for(:onload) do
     -#$('#log').load("#{import_stream_licenses_path(:amkt_cookie => flash[:amkt_cookie])}")
 
@@ -21,3 +22,15 @@
   = submit_tag 'Update'
 
 %h2 Report
+
+%p This example uses the following spreadsheet:
+= link_to 'https://spreadsheets.google.com/pub?key=rh_6pF1K_XsruwVr_doofvw',
+  'https://spreadsheets.google.com/pub?key=rh_6pF1K_XsruwVr_doofvw'
+
+%br
+
+= select("album[]", "default", %w[0 3 5 8 -1], {}, { :index => nil })
+
+%br
+
+%div#table
