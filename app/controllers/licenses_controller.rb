@@ -343,7 +343,7 @@ class LicensesController < ApplicationController
   end
 
   def sales
-    @vendor = session[:vendor]
+    @vendor = {}#session[:vendor]
   end
 
   def sales_update
