@@ -298,7 +298,7 @@ class LicensesController < ApplicationController
       proxy_addr = proxy.host
       proxy_port = proxy.port
     end
-    http = Net::HTTP::Proxy(proxy_addr, proxy_port).start(uri.host, uri.port,
+    http = Net::HTTP.start(uri.host, uri.port, proxy_addr, proxy_port,
       :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_NONE)
     http
   end
