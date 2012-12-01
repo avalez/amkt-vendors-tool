@@ -55,13 +55,18 @@ Then go to http://your-addon.herokuapp.com/licenses
 NOTE, it is restricted with basic authentication using username and password of
 your choice, stored hashed as Heroku configuraiton variables.
 
-KNOWN PROBLEM: timeout with licenses/import, but it works, see
-https://devcenter.heroku.com/articles/request-timeout
+KNOWN PROBLEMS:
+1) Timeout with licenses/import on heroku. See also
+https://devcenter.heroku.com/articles/request-timeout.
 
 Attempted to fix with http://asciicasts.com/episodes/266-http-streaming
 unsuccessfully, see
 http://stackoverflow.com/questions/7504492/rails-http-streaming-with-haml, so
-using ajax for plain response. See also hints for unicorn on heroku: http://michaelvanrooijen.com/articles/2011/06/01-more-concurrency-on-a-single-heroku-dyno-with-the-new-celadon-cedar-stack/
+using ajax for plain response. See also hints for unicorn on heroku:
+http://michaelvanrooijen.com/articles/2011/06/01-more-concurrency-on-a-single-heroku-dyno-with-the-new-celadon-cedar-stack/
+
+2) When invalid date is selected, e.g. 31 Nov, it's not validated, tool just crashes
+(on heroku it's not clear why even), just go back in browser, and select correct date.
 
 NOTICE, this software can be used without any warranties or restrictions of use and
 redistribution.
