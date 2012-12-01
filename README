@@ -32,10 +32,16 @@ Try it locally:
   $ git clone https://github.com/avalez/amkt-vendors-tool
   $ cd amkt-vedors-tool
   $ bundle install --without production
+  $ rake db:migrate
   $ rails server
 
 Then go to http://localhost:3000/licenses to see it working and to
 licesses/import to get licenses from AMKT.
+
+Note, /licenses/import is slow and does not show any progress, just be patient and you'll
+get result (may take up to 30s).
+
+Additionally there is /licenes/sales that uses AMKT sales rest api and do not persist anything.
 
 And run it on Heroku:
 
