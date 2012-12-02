@@ -27,6 +27,11 @@ e.g.:
 
 2) Edit License.rb and specify your prices for your add-on.
 
+3) Using Ruby 1.8.7 change all (two) urls to http (instead of https), see
+http://epochwolf.com/blog/2011/12/06/nethttpbadresponse-wrong-status-line-doctype/
+and http://stackoverflow.com/questions/6347187/https-request-using-nethttps-block-form-is-it-possible
+With Ruby 1.9 there no such problem.
+
 Try it locally:
 
   $ git clone https://github.com/avalez/amkt-vendors-tool
