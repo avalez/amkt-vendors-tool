@@ -190,6 +190,7 @@ class LicensesController < ApplicationController
     end
 =end
     @total = Hash[@all_editions.map {|edition, price| [edition, 0]}]
+    @amount = Hash[@all_editions.map {|edition, price| [edition, 0]}]
     @pivot = @licenses.reduce({}) do |m, row|
       if session[:group_by]
         date = Date.parse row['startDate']
@@ -202,13 +203,23 @@ class LicensesController < ApplicationController
       record[edition] = (row['count'] || 1) + (record[edition] || 0)
       m[startDate] = record
       @total[edition] += row['count'] || 1
+      @amount[edition] += row['price']
       m
     end
   end
 
   def pivot
-    restful
-    pivot_licenses
+    respond_to do |format|
+      format.html do
+        restful
+        pivot_licenses
+      end
+      format.json do
+        pivot_licenses
+        json = { :total => @total, :amount => @amount}
+        render :json => json
+      end
+    end
   end
 
   def timeline

@@ -33,9 +33,10 @@
  *         sortColumn {number} set according to the given sort.
  * @constructor
  */
-var TableQueryWrapper = function(query, container, options) {
+var TableQueryWrapper = function(query, container, chart_container, options) {
 
   this.table = new google.visualization.Table(container);
+  this.chart = new google.visualization.ColumnChart(chart_container);
   this.query = query;
   this.sortQueryClause = '';
   this.container = container;
@@ -57,6 +58,7 @@ var TableQueryWrapper = function(query, container, options) {
   options['pageSize'] = (options['pageSize'] > 0) ? options['pageSize'] : 10;
   this.pageSize = options['pageSize'];
   this.tableOptions = options;
+  this.chartOptions = {};
   this.currentPageIndex = 0;
   this.setPageQueryClause(0);
 };
@@ -83,6 +85,7 @@ TableQueryWrapper.prototype.handleResponse = function(response) {
   } else {
     this.currentDataTable = response.getDataTable();
     this.table.draw(this.currentDataTable, this.tableOptions);
+    this.chart.draw(response.getChartDataTable(), this.chartOptions);
   }
 };
 

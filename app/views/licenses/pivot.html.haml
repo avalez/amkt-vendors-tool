@@ -1,3 +1,7 @@
+- content_for(:head) do
+  = javascript_include_tag 'http://www.google.com/jsapi'
+  = javascript_include_tag :pivotchart
+
 = render 'nav'
 
 %h1 All Licenses
@@ -5,6 +9,8 @@
 = render 'filter'
 
 = render 'group'
+
+%div#chart
 
 %table#licenses
   %thead

@@ -1,7 +1,7 @@
-google.load('visualization', '1', {'packages' : ['table']});
+google.load('visualization', '1', {'packages' : ['table', 'corechart']});
 google.setOnLoadCallback(init);
 
-var query, options, container;
+var query, options, container, chart_container;
 
 var SalesQuery = function() {
 }
@@ -28,6 +28,8 @@ SalesQuery.prototype.send = function(limit, offset, callback) {
     data.addColumn('string', 'technicalContactName');
     data.addColumn('number', 'vendorAmount');
     var rows = [];
+    var chart_pivot = {'10 Users' : {}, '25 Users' : {}, '50 Users' : {},
+     '100 Users': {}, '500 Users' : {}, 'Unlimited Users' : {}};
     for (i in json.sales) {
       var sale = json.sales[i];
       rows.push([sale.billingContact ? sale.billingContact.email : 'N/A',
@@ -40,11 +42,34 @@ SalesQuery.prototype.send = function(limit, offset, callback) {
         sale.technicalContact ? sale.technicalContact.email : 'N/A',
         sale.technicalContact ? sale.technicalContact.name : 'N/A',
         sale.vendorAmount]);
+
+      // chart
+      if (!(sale.licenseSize in chart_pivot)) {
+        chart_pivot[sale.licenseSize] = {};
+      }
+      edition_pivot = chart_pivot[sale.licenseSize];
+      edition_pivot.count = (edition_pivot.count || 0) + 1;
+      edition_pivot.gross = (edition_pivot.gross || 0) + sale.purchasePrice;
+      edition_pivot.net = (edition_pivot.net || 0) + sale.vendorAmount;
     }
     data.addRows(rows);
+
+    // chart
+    var chart_rows = [];
+    chart_rows.push(['licenseSize', 'Count * 100', 'Gross', 'Net']);
+    for (key in chart_pivot) {
+      chart_rows.push([key,
+        chart_pivot[key].count * 100,
+        chart_pivot[key].gross,
+        chart_pivot[key].net]);
+    }
+    //chart_data.addRows(chart_rows);
+    var chart_data = google.visualization.arrayToDataTable(chart_rows);
+
     callback({
       isError: function() { return false},
-      getDataTable: function() {return data}
+      getDataTable: function() {return data},
+      getChartDataTable: function() {return chart_data}
     })
   })
 }
@@ -52,12 +77,13 @@ SalesQuery.prototype.send = function(limit, offset, callback) {
 function init() {
   query = new SalesQuery();
   container = document.getElementById("table");
+  chart_container = document.getElementById("chart");
   options = {'pageSize': 10};
   sendAndDraw();
 }
 
 function sendAndDraw() {
-  var tableQueryWrapper = new TableQueryWrapper(query, container, options);
+  var tableQueryWrapper = new TableQueryWrapper(query, container, chart_container, options);
   tableQueryWrapper.sendAndDraw();
 }
 
