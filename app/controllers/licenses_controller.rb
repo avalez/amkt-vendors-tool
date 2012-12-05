@@ -22,8 +22,8 @@ class LicensesController < ApplicationController
       filter[:startDate] = @fromDate .. @toDate
     end
     @licenses = License.where(filter)
-    if (session[:countries])
-      @licenses = @licenses.joins(:technicalContactAddress).where('addresses.country' => session[:countries].keys)
+    if (session[:c])
+      @licenses = @licenses.joins(:technicalContactAddress).where('addresses.country' => session[:c].keys)
     end
     if (session[:sort])
       # otherwise column does not exist in postresql
@@ -48,19 +48,19 @@ class LicensesController < ApplicationController
 
   def restful
     update_session :editions
-    update_session :countries
+    update_session :c
     update_session :fromDate
     update_session :toDate
     update_session :sort
     update_session :group_by
     if (params[:editions] != session[:editions] ||
-        params[:countries] != session[:countries] ||
+        params[:c] != session[:c] ||
         params[:fromDate] != session[:fromDate] ||
         params[:toDate] != session[:toDate] ||
         params[:sort] != session[:sort] ||
         params[:group_by] != session[:group_by])
       redirect_to :action => action_name,
-        :editions => session[:editions], :countries => session[:countries],
+        :editions => session[:editions], :c => session[:c],
         :fromDate => session[:fromDate], :toDate => session[:toDate],
         :sort => session[:sort], :group_by => session[:group_by]
       return false
@@ -71,14 +71,14 @@ class LicensesController < ApplicationController
 
   def restful_redirect
     redirect_to :action => params[:return_to],
-      :editions => session[:editions], :countries => session[:countries],
+      :editions => session[:editions], :c => session[:c],
       :fromDate => session[:fromDate], :toDate => session[:toDate],
       :sort => session[:sort], :group_by => session[:group_by]
   end
 
   def filter
     session[:editions] = params[:editions]
-    session[:countries] = params[:countries]
+    session[:c] = params[:c]
     session[:fromDate] = params[:fromDate]
     session[:toDate] = params[:toDate]
     restful_redirect
@@ -100,11 +100,12 @@ class LicensesController < ApplicationController
     geo
     @sum = @licenses.reduce(0) {|sum, license| sum + (license['price'] || 0)}
     @all_countries = @geo.keys
+    @supported_countries = License.supported_countries.reject { |c, _| @all_countries.index(c) == nil}
   end
 
   def bought
     index or return
-    @licenses = @licenses.find_all {|license| License.paid_licenseTypes.include? license['licenseType']}
+    @licenses = @licenses.find_all {|license| License.paid_licenseTypes.index(license['licenseType'])}
     @licenses = @licenses.sort_by {|license| license['startDate']}
     render :action => 'index'
   end
