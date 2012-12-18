@@ -320,9 +320,9 @@ class LicensesController < ApplicationController
     request = Net::HTTP::Post.new(uri.request_uri)
     request.set_form_data({:redirect => '', :username => username, :password => password})
     response = amkt_http(uri).request(request)
-    auth = (/\/login\W/ !~ response['location'])
+    auth = (/\/login\W/ !~ response['Location'])
     if auth && block_given?
-      yield response['set-cookie'].split(';')[0]
+      yield response['set-cookie']
     end
     auth
   end
@@ -334,7 +334,7 @@ class LicensesController < ApplicationController
     if (response.code == '200')
       response.body.force_encoding("UTF-8")
     else
-      @log << [response.code, response.body]
+      @log << [response.code, response.body, response['Location']]
       false
     end
   end
